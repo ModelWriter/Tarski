@@ -3,43 +3,52 @@ package eu.modelwriter.core.alloyinecore.ui.editor.completion.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.BodySuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.DerivationSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EAnnotationSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EAttributeSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EClassSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EClassifierSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EDataTypeSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EDetailSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EEnumLiteralSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EEnumSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EModelElementRefSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EModelElementSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.ENamedElementSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EOperationSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EPackageSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EParameterSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EReferenceSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EStructuralFeatureSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.ETypedElementSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.ExpressionSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.FormulaSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.IdentifierSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.InitialSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.InvariantSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.LowerSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.ModelSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.MultiplicitySuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.OptionSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.OptionsSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.PackageImportSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.PathNameSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.PostconditionSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.PreconditionSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.TemplateSignatureSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.UnrestrictedNameSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.UpperSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.VisibilityKindSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.BodySuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.DerivationSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EAnnotationSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EAttributeSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EClassSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EClassifierSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EDataTypeSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EDetailSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EEnumLiteralSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EEnumSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EGenericElementTypeSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EGenericExceptionSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EGenericSuperTypeSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EGenericTypeArgumentSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EGenericTypeSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EGenericWildcardSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EModelElementRefSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EModelElementSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EMultiplicitySuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.ENamedElementSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EOperationSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EPackageSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EParameterSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EPrimitiveTypeSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EReferenceSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.EStructuralFeatureSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.ETypeParameterSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.ETypedElementSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.ExpressionSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.FormulaSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.IdentifierSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.InitialSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.InvariantSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.LowerSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.ModelSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.OptionSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.OptionsSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.PackageImportSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.PathNameSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.PostconditionSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.PreconditionSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.SegmentSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.TemplateSignatureSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.UnrestrictedNameSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.UpperSuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.provider.VisibilityKindSuggestionProvider;
 
 public class AIESuggestionProviderSingletonFactory {
   private static AIESuggestionProviderSingletonFactory instance;
@@ -81,6 +90,15 @@ public class AIESuggestionProviderSingletonFactory {
   private static AIESuggestionProvider unrestrictedNameSP;
   private static AIESuggestionProvider upperSP;
   private static AIESuggestionProvider visibilityKindSP;
+  private static AIESuggestionProvider eGenericExceptionSP;
+  private static AIESuggestionProvider eGenericSuperTypeSP;
+  private static AIESuggestionProvider eGenericTypeSP;
+  private static AIESuggestionProvider eGenericTypeArgumentSP;
+  private static AIESuggestionProvider ePrimitiveTypeSP;
+  private static AIESuggestionProvider eGenericElementTypeSP;
+  private static AIESuggestionProvider eTypeParameterSP;
+  private static AIESuggestionProvider eGenericWildcardSP;
+  private static AIESuggestionProvider segmentSP;
 
   public static AIESuggestionProviderSingletonFactory instance() {
     if (AIESuggestionProviderSingletonFactory.instance == null) {
@@ -113,7 +131,7 @@ public class AIESuggestionProviderSingletonFactory {
       AIESuggestionProviderSingletonFactory.invariantSP = new InvariantSuggestionProvider();
       AIESuggestionProviderSingletonFactory.lowerSP = new LowerSuggestionProvider();
       AIESuggestionProviderSingletonFactory.modelSP = new ModelSuggestionProvider();
-      AIESuggestionProviderSingletonFactory.multiplicitySP = new MultiplicitySuggestionProvider();
+      AIESuggestionProviderSingletonFactory.multiplicitySP = new EMultiplicitySuggestionProvider();
       AIESuggestionProviderSingletonFactory.optionsSP = new OptionsSuggestionProvider();
       AIESuggestionProviderSingletonFactory.optionSP = new OptionSuggestionProvider();
       AIESuggestionProviderSingletonFactory.packageImportSP = new PackageImportSuggestionProvider();
@@ -127,15 +145,31 @@ public class AIESuggestionProviderSingletonFactory {
       AIESuggestionProviderSingletonFactory.upperSP = new UpperSuggestionProvider();
       AIESuggestionProviderSingletonFactory.visibilityKindSP =
           new VisibilityKindSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.eGenericExceptionSP =
+          new EGenericExceptionSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.eGenericSuperTypeSP =
+          new EGenericSuperTypeSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.eGenericTypeSP = new EGenericTypeSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.eGenericTypeArgumentSP =
+          new EGenericTypeArgumentSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.ePrimitiveTypeSP =
+          new EPrimitiveTypeSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.eGenericElementTypeSP =
+          new EGenericElementTypeSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.eTypeParameterSP =
+          new ETypeParameterSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.eGenericWildcardSP =
+          new EGenericWildcardSuggestionProvider();
+      AIESuggestionProviderSingletonFactory.segmentSP = new SegmentSuggestionProvider();
     }
     return AIESuggestionProviderSingletonFactory.instance;
   }
 
-  public AIESuggestionProvider BodySP() {
+  public AIESuggestionProvider bodySP() {
     return AIESuggestionProviderSingletonFactory.bodySP;
   }
 
-  public AIESuggestionProvider DerivationSP() {
+  public AIESuggestionProvider derivationSP() {
     return AIESuggestionProviderSingletonFactory.derivationSP;
   }
 
@@ -207,82 +241,118 @@ public class AIESuggestionProviderSingletonFactory {
     return AIESuggestionProviderSingletonFactory.eTypedElementSP;
   }
 
-  public AIESuggestionProvider ExpressionSP() {
+  public AIESuggestionProvider expressionSP() {
     return AIESuggestionProviderSingletonFactory.expressionSP;
   }
 
-  public AIESuggestionProvider FormulaSP() {
+  public AIESuggestionProvider formulaSP() {
     return AIESuggestionProviderSingletonFactory.formulaSP;
   }
 
-  public AIESuggestionProvider IndentifierSP() {
+  public AIESuggestionProvider indentifierSP() {
     return AIESuggestionProviderSingletonFactory.indentifierSP;
   }
 
-  public AIESuggestionProvider InitialSP() {
+  public AIESuggestionProvider initialSP() {
     return AIESuggestionProviderSingletonFactory.initialSP;
   }
 
-  public AIESuggestionProvider InvariantSP() {
+  public AIESuggestionProvider invariantSP() {
     return AIESuggestionProviderSingletonFactory.invariantSP;
   }
 
-  public AIESuggestionProvider LowerSP() {
+  public AIESuggestionProvider lowerSP() {
     return AIESuggestionProviderSingletonFactory.lowerSP;
   }
 
-  public AIESuggestionProvider ModelSP() {
+  public AIESuggestionProvider modelSP() {
     return AIESuggestionProviderSingletonFactory.modelSP;
   }
 
-  public AIESuggestionProvider MultiplicitySP() {
+  public AIESuggestionProvider multiplicitySP() {
     return AIESuggestionProviderSingletonFactory.multiplicitySP;
   }
 
-  public AIESuggestionProvider OptionsSP() {
+  public AIESuggestionProvider optionsSP() {
     return AIESuggestionProviderSingletonFactory.optionsSP;
   }
 
-  public AIESuggestionProvider OptionSP() {
+  public AIESuggestionProvider optionSP() {
     return AIESuggestionProviderSingletonFactory.optionSP;
   }
 
-  public AIESuggestionProvider PackageImportSP() {
+  public AIESuggestionProvider packageImportSP() {
     return AIESuggestionProviderSingletonFactory.packageImportSP;
   }
 
-  public AIESuggestionProvider PathNameSP() {
+  public AIESuggestionProvider pathNameSP() {
     return AIESuggestionProviderSingletonFactory.pathNameSP;
   }
 
-  public AIESuggestionProvider PostconditionSP() {
+  public AIESuggestionProvider postconditionSP() {
     return AIESuggestionProviderSingletonFactory.postconditionSP;
   }
 
-  public AIESuggestionProvider PreconditionSP() {
+  public AIESuggestionProvider preconditionSP() {
     return AIESuggestionProviderSingletonFactory.preconditionSP;
   }
 
-  public AIESuggestionProvider TemplateSignatureSP() {
+  public AIESuggestionProvider templateSignatureSP() {
     return AIESuggestionProviderSingletonFactory.templateSignatureSP;
   }
 
-  public AIESuggestionProvider UnrestrictedNameSP() {
+  public AIESuggestionProvider unrestrictedNameSP() {
     return AIESuggestionProviderSingletonFactory.unrestrictedNameSP;
   }
 
-  public AIESuggestionProvider UpperSP() {
+  public AIESuggestionProvider upperSP() {
     return AIESuggestionProviderSingletonFactory.upperSP;
   }
 
-  public AIESuggestionProvider VisibilityKindSP() {
+  public AIESuggestionProvider visibilityKindSP() {
     return AIESuggestionProviderSingletonFactory.visibilityKindSP;
+  }
+
+  public AIESuggestionProvider eGenericExceptionSP() {
+    return AIESuggestionProviderSingletonFactory.eGenericExceptionSP;
+  }
+
+  public AIESuggestionProvider eGenericSuperTypeSP() {
+    return AIESuggestionProviderSingletonFactory.eGenericSuperTypeSP;
+  }
+
+  public AIESuggestionProvider eGenericTypeSP() {
+    return AIESuggestionProviderSingletonFactory.eGenericTypeSP;
+  }
+
+  public AIESuggestionProvider eGenericTypeArgumentSP() {
+    return AIESuggestionProviderSingletonFactory.eGenericTypeArgumentSP;
+  }
+
+  public AIESuggestionProvider ePrimitiveTypeSP() {
+    return AIESuggestionProviderSingletonFactory.ePrimitiveTypeSP;
+  }
+
+  public AIESuggestionProvider eGenericElementTypeSP() {
+    return AIESuggestionProviderSingletonFactory.eGenericElementTypeSP;
+  }
+
+  public AIESuggestionProvider eTypeParameterSP() {
+    return AIESuggestionProviderSingletonFactory.eTypeParameterSP;
+  }
+
+  public AIESuggestionProvider eGenericWildcardSP() {
+    return AIESuggestionProviderSingletonFactory.eGenericWildcardSP;
+  }
+
+  public AIESuggestionProvider segmentSP() {
+    return AIESuggestionProviderSingletonFactory.segmentSP;
   }
 
   public List<AIESuggestionProvider> allSuggestionProviders() {
     final List<AIESuggestionProvider> all = new ArrayList<>();
-    all.add(BodySP());
-    all.add(DerivationSP());
+    all.add(bodySP());
+    all.add(derivationSP());
     all.add(eAnnotationSP());
     all.add(eAttributeSP());
     all.add(eClassifierSP());
@@ -300,23 +370,32 @@ public class AIESuggestionProviderSingletonFactory {
     all.add(eReferenceSP());
     all.add(eStructuralFeatureSP());
     all.add(eTypedElementSP());
-    all.add(ExpressionSP());
-    all.add(FormulaSP());
-    all.add(IndentifierSP());
-    all.add(InitialSP());
-    all.add(LowerSP());
-    all.add(ModelSP());
-    all.add(MultiplicitySP());
-    all.add(OptionsSP());
-    all.add(OptionSP());
-    all.add(PackageImportSP());
-    all.add(PathNameSP());
-    all.add(PostconditionSP());
-    all.add(PreconditionSP());
-    all.add(TemplateSignatureSP());
-    all.add(UnrestrictedNameSP());
-    all.add(UpperSP());
-    all.add(VisibilityKindSP());
+    all.add(expressionSP());
+    all.add(formulaSP());
+    all.add(indentifierSP());
+    all.add(initialSP());
+    all.add(lowerSP());
+    all.add(modelSP());
+    all.add(multiplicitySP());
+    all.add(optionsSP());
+    all.add(optionSP());
+    all.add(packageImportSP());
+    all.add(pathNameSP());
+    all.add(postconditionSP());
+    all.add(preconditionSP());
+    all.add(templateSignatureSP());
+    all.add(unrestrictedNameSP());
+    all.add(upperSP());
+    all.add(visibilityKindSP());
+    all.add(eGenericExceptionSP());
+    all.add(eGenericSuperTypeSP());
+    all.add(eGenericTypeSP());
+    all.add(eGenericTypeArgumentSP());
+    all.add(ePrimitiveTypeSP());
+    all.add(eGenericElementTypeSP());
+    all.add(eTypeParameterSP());
+    all.add(eGenericWildcardSP());
+    all.add(segmentSP());
     return all;
   }
 }

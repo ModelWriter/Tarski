@@ -15,10 +15,6 @@ public abstract class AbstractAIESuggestionProvider implements AIESuggestionProv
   protected Set<String> suggestions;
   protected List<String> allPossibleTokens;
 
-  public AbstractAIESuggestionProvider() {
-    initStartSuggestions();
-  }
-
   @Override
   public Set<String> getSuggestions(final ParserRuleContext context, final ParseTree lastToken) {
     suggestions = new HashSet<>();
@@ -73,11 +69,7 @@ public abstract class AbstractAIESuggestionProvider implements AIESuggestionProv
 
   protected abstract void initChildProviders();
 
-  protected abstract void initStartSuggestions();
-
   protected abstract void computeSuggestions(ParserRuleContext context, ParseTree lastToken);
 
   protected abstract boolean isCompatibleWithContext(ParserRuleContext context);
-
-  protected abstract Set<String> getStartSuggestions();
 }

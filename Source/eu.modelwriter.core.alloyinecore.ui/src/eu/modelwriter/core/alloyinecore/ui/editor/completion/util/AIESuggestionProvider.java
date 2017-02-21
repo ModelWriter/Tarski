@@ -7,4 +7,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public interface AIESuggestionProvider {
   Set<String> getSuggestions(ParserRuleContext context, ParseTree lastToken);
+
+  Set<String> getStartSuggestions();
 }

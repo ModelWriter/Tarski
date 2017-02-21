@@ -40,6 +40,7 @@ public interface CompletionTokens {
   String _leftArrow = "<";
   String _rightArrow = ">";
   String _extends = "extends";
+  String _super = "super";
   String _static = "static";
   String _operation = "operation";
   String _ghost = "ghost";
@@ -87,4 +88,16 @@ public interface CompletionTokens {
   String _notResolve = "!" + CompletionTokens._resolve;
   String _key = "key";
   String _throws = "throws";
+  String _boolean = "Boolean";
+  String _integer = "Integer";
+  String _string = "String";
+  String _real = "Real";
+  String _unlimitedNatural = "UnlimitedNatural";
+  List<String> _primitives =
+      new ArrayList<>(Arrays.asList(CompletionTokens._boolean, CompletionTokens._integer,
+          CompletionTokens._string, CompletionTokens._real, CompletionTokens._unlimitedNatural));
+  String _ampersand = "&";
+  String _dot = ".";
+  String _doubleColon = "::";
+  String _at = "@";
 }
