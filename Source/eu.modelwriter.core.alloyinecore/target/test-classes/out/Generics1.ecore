@@ -57,7 +57,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Car"/>
   <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
-      <eGenericType/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Owner">
@@ -98,6 +98,8 @@
       <eParameters name="arg"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ref"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="heyRef" lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="noWay" lowerBound="1"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="b" lowerBound="2" upperBound="5">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
     </eStructuralFeatures>
@@ -117,4 +119,14 @@
     <eLiterals name="ScienceFiction"/>
     <eLiterals name="Biography"/>
   </eClassifiers>
+  <eSubpackages name="sub" nsURI="subsubsub" nsPrefix="s">
+    <eClassifiers xsi:type="ecore:EClass" name="Hey">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
+        <details key="visibility" value="public"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eSubpackages name="subsub" nsURI="wow such sub" nsPrefix="s2">
+      <eClassifiers xsi:type="ecore:EClass" name="CantTouchThis"/>
+    </eSubpackages>
+  </eSubpackages>
 </ecore:EPackage>

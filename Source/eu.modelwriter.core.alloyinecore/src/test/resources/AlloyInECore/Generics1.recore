@@ -31,7 +31,7 @@ package generics : gns = 'eu.modelwriter.generics'
     class Canvas
     {
         operation draw(shapes : List<? extends Shape>, x: Integer, y: Integer) : Boolean[?];
-        operation <V extends Shape> create(name : String);
+        operation <V extends Shap> create(name : String);
         operation create(arg : ArrayList<? super Canvas>[?])
         {
             requires : one ArrayList;
@@ -39,7 +39,7 @@ package generics : gns = 'eu.modelwriter.generics'
         }
         property ref : List<?>[?];
         property heyRef: sub::Hey;
-        property noWay: sub::subberino::ThatsEnough;
+        property noWay: sub::subsub::CantTouchThis;
         property b : My::A[2..5|?];
         attribute c: String;
         attribute d: V[*|?];
@@ -65,8 +65,8 @@ package generics : gns = 'eu.modelwriter.generics'
     package sub : s = 'subsubsub'
     {
         public class Hey;
-        package subberino : s2 = 'wow such sub'{
-            class ThatsEnough;
+        package subsub : s2 = 'wow such sub'{
+            class CantTouchThis;
         }
     }
 }
