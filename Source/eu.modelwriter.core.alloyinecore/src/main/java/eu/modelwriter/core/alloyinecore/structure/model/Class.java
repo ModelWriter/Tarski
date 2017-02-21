@@ -26,14 +26,19 @@ package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.ISegment;
+import eu.modelwriter.core.alloyinecore.structure.base.ISource;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedClass;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EClass;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class Class extends Classifier<EClass, EClassContext> implements IVisibility {
+public class Class extends Classifier<EClass, EClassContext> implements IVisibility, ISource, ITarget {
 
     public Class(EClass eClass, EClassContext context) {
         super(eClass, context);
@@ -46,13 +51,15 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
             String text = getContext().visibility.getText();
             try {
                 visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+            } catch (IllegalArgumentException e) {
+                visibility = Visibility.PACKAGE;
+            }
         }
         return visibility;
     }
 
     @Override
-    protected String getName(){
+    protected String getName() {
         if (this.getContext().name != null)
             return ":" + this.getContext().name.getText();
         else
@@ -68,6 +75,11 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
     }
 
     @Override
+    public String getSegment() {
+        return getContext().name != null ? getContext().name.getText() : ITarget.super.getSegment();
+    }
+
+    @Override
     public String getLabel() {
         int start;
         int stop;
@@ -79,16 +91,16 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
             stop = getContext().stop.getStopIndex();
         }
 
-        if (getContext().templateSignature != null){
+        if (getContext().templateSignature != null) {
             stop = getContext().templateSignature.stop.getStopIndex();
         }
-        return  Element.getNormalizedText(getContext(), start, stop);
+        return Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override
     public String getSuffix() {
         if (!getContext().eSuperTypes.isEmpty()) {
-            return ": " + String.join(", " , this.getContext().eGenericSuperType().stream().map(RuleContext::getText).collect(Collectors.toList()));
+            return ": " + String.join(", ", this.getContext().eGenericSuperType().stream().map(RuleContext::getText).collect(Collectors.toList()));
         } else {
             return "";
         }
@@ -115,7 +127,7 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
         else return super.getLine();
     }
 
-    public boolean isAbstract(){
+    public boolean isAbstract() {
         return getContext().isAbstract != null;
     }
 
@@ -124,4 +136,11 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
         return visitor.visitClass(this);
     }
 
+    @Override
+    public List<ISegment> getTargets() {
+        return ISource.super.getTargets().stream()
+                .filter(e -> e instanceof Class ||
+                        e instanceof ImportedClass)
+                .collect(Collectors.toList());
+    }
 }

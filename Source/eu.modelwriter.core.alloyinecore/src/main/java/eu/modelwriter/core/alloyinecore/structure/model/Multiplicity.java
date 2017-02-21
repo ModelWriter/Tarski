@@ -42,39 +42,57 @@ public class Multiplicity extends Element<EMultiplicityContext> {
 
         if (getContext().stringBound != null) {
             switch (getContext().stringBound.getText()) {
-                case "*": l = 0; u = -1; break;
-                case "+": l = 1; u = -1; break;
-                case "?": l = 0; u =  1; break;
-                default: break;
+                case "*":
+                    l = 0;
+                    u = -1;
+                    break;
+                case "+":
+                    l = 1;
+                    u = -1;
+                    break;
+                case "?":
+                    l = 0;
+                    u = 1;
+                    break;
+                default:
+                    break;
             }
         } else {
             try {
                 l = Integer.valueOf(getContext().lowerBound.getText());
-            }catch (NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 System.out.println(Arrays.toString(ex.getStackTrace()));
             }
             if (getContext().upperBound != null) {
                 if (getContext().upperBound.getText().equals("*")) u = -1;
-                else try { u = Integer.valueOf(getContext().upperBound.getText());}
-                catch (NumberFormatException ex){
+                else try {
+                    u = Integer.valueOf(getContext().upperBound.getText());
+                } catch (NumberFormatException ex) {
                     System.out.println(Arrays.toString(ex.getStackTrace()));
                 }
-            } else { u = l;}
+            } else {
+                u = l;
+            }
         }
         String multiplicity;
-        if (l==0 && u==-1)
+        if (l == 0 && u == -1)
             multiplicity = "[*]";
-        else if (l==1 && u==-1)
+        else if (l == 1 && u == -1)
             multiplicity = "[+]";
-        else if (l==0 && u==1)
+        else if (l == 0 && u == 1)
             multiplicity = "[?]";
-        else if (l==1 && u==1)
+        else if (l == 1 && u == 1)
             multiplicity = "[1]";
-        else if (l==u)
+        else if (l == u)
             multiplicity = "[" + l + "]";
         else
             multiplicity = "[" + l + ".." + u + "]";
         return multiplicity;
+    }
+
+    public boolean isMany() {
+        String label = getLabel();
+        return !label.equals("[1]") && !label.equals("[?]");
     }
 
     @Override

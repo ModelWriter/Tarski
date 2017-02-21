@@ -26,11 +26,12 @@ package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EDataType;
 
-public class DataType extends Classifier<EDataType, EDataTypeContext> implements IVisibility {
+public class DataType extends Classifier<EDataType, EDataTypeContext> implements IVisibility, ITarget {
     public DataType(EDataType eDataType, EDataTypeContext context) {
         super(eDataType, context);
     }
@@ -42,7 +43,9 @@ public class DataType extends Classifier<EDataType, EDataTypeContext> implements
             String text = getContext().visibility.getText();
             try {
                 visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+            } catch (IllegalArgumentException e) {
+                visibility = Visibility.PACKAGE;
+            }
         }
         return visibility;
     }
@@ -53,6 +56,11 @@ public class DataType extends Classifier<EDataType, EDataTypeContext> implements
             return getContext().name.start;
         else
             return super.getToken();
+    }
+
+    @Override
+    public String getSegment() {
+        return getContext().name != null ? getContext().name.getText() : ITarget.super.getSegment();
     }
 
     @Override
@@ -67,14 +75,14 @@ public class DataType extends Classifier<EDataType, EDataTypeContext> implements
             stop = getContext().stop.getStopIndex();
         }
 
-        if (getContext().templateSignature != null){
+        if (getContext().templateSignature != null) {
             stop = getContext().templateSignature.stop.getStopIndex();
         }
-        return  Element.getNormalizedText(getContext(), start, stop);
+        return Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override
-    protected String getName(){
+    protected String getName() {
         if (this.getContext().name != null)
             return ":" + this.getContext().name.getText();
         else

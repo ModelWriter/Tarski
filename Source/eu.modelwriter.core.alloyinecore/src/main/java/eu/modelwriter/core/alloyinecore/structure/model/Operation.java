@@ -25,9 +25,14 @@
 package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.ISegment;
+import eu.modelwriter.core.alloyinecore.structure.base.ISource;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedClass;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedDataType;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EOperation;
@@ -36,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class Operation extends TypedElement<EOperation, EOperationContext> implements IVisibility{
+public final class Operation extends TypedElement<EOperation, EOperationContext> implements IVisibility, ISource, ITarget {
 
     public Operation(EOperation eOperation, EOperationContext context) {
         super(eOperation, context);
@@ -46,9 +51,9 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
         super(context);
     }
 
-    public List<Parameter> getParameters(){
+    public List<Parameter> getParameters() {
         List<Parameter> parameters = new ArrayList<>();
-        for(Element e : getOwnedElements())
+        for (Element e : getOwnedElements())
             if (e instanceof Parameter) parameters.add((Parameter) e);
         return parameters;
     }
@@ -60,7 +65,9 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
             String text = getContext().visibility.getText();
             try {
                 visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+            } catch (IllegalArgumentException e) {
+                visibility = Visibility.PACKAGE;
+            }
         }
         return visibility;
     }
@@ -80,7 +87,7 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
             name = getContext().name.getText();
         }
         List<String> parameterTypeTexts = new ArrayList<>();
-        for(Parameter e : this.getOwnedElements(Parameter.class)){
+        for (Parameter e : this.getOwnedElements(Parameter.class)) {
             EGenericElementTypeContext typeRef = e.getContext().eParameterType;
             if (typeRef != null) parameterTypeTexts.add(Element.getNormalizedText(typeRef));
         }
@@ -88,16 +95,21 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
     }
 
     @Override
+    public String getSegment() {
+        return getContext().name != null ? getContext().name.getText() : ISource.super.getSegment();
+    }
+
+    @Override
     public String getSuffix() {
         String throwsText = "";
-        if (!getContext().ownedException.isEmpty()){
+        if (!getContext().ownedException.isEmpty()) {
             throwsText = "throws " + String.join(", ", getContext().ownedException.stream()
                     .map(eGenericExceptionContext -> Element.getNormalizedText(eGenericExceptionContext.eGenericType)).collect(Collectors.toList()));
         }
 
-        if (getContext().eReturnType == null ) {
+        if (getContext().eReturnType == null) {
             return ": void" + " " + throwsText;
-        } else if (getContext().ownedMultiplicity != null ) {
+        } else if (getContext().ownedMultiplicity != null) {
             String multiplicity = TypedElement.getMultiplicity(getContext().ownedMultiplicity);
             if (getContext().eReturnType != null) {
                 EGenericElementTypeContext ctx = getContext().eReturnType;
@@ -133,7 +145,7 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
                 }
             }
         } else {
-            name = name+ "#0";
+            name = name + "#0";
         }
         return name;
     }
@@ -155,5 +167,14 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitOperation(this);
+    }
+
+    @Override
+    public List<ISegment> getTargets() {
+        return ISource.super.getTargets().stream()
+                .filter(e -> e instanceof Classifier ||
+                        e instanceof ImportedClass ||
+                        e instanceof ImportedDataType)
+                .collect(Collectors.toList());
     }
 }

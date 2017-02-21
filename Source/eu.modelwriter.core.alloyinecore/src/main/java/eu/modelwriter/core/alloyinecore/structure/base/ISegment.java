@@ -24,6 +24,12 @@
 
 package eu.modelwriter.core.alloyinecore.structure.base;
 
-public interface IName {
+public interface ISegment {
+
+    Element getOwner();
+
+    default String getSegment() {
+        return this.getClass().getSimpleName();
+    }
 
 }

@@ -27,6 +27,7 @@ package eu.modelwriter.core.alloyinecore.structure.model;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Object;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EGenericType;
 
 //GenericElementType
@@ -37,6 +38,11 @@ public final class GenericElementType extends Object<EGenericType, EGenericEleme
 
     public GenericElementType(EGenericElementTypeContext context) {
         super(context);
+    }
+
+    @Override
+    public Token getToken() {
+        return this.getContext().stop;
     }
 
     @Override

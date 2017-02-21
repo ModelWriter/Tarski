@@ -29,9 +29,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 import java.util.List;
 
-public interface INamespace extends IName {
-
-    List<IName> getNames();
+public interface INamespace extends ISegment {
 
     String getKey();
 

@@ -32,7 +32,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 
-import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,11 +54,31 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         return ownedElements;
     }
 
+    public final List<Element> getAllOwnedElements() {
+        List<Element> result = new ArrayList<>();
+        for (Element<?> ownedElement : ownedElements) {
+            result.add(ownedElement);
+            result.addAll(ownedElement.getAllOwnedElements());
+        }
+        return result;
+    }
+
+    public final <T> List<T> getAllOwnedElements(java.lang.Class<T> type, boolean skipAnnotationOwneds) {
+        List<T> elements = new ArrayList<>();
+        for (Element<?> e : getOwnedElements()) {
+            if (type.isInstance(e)) elements.add(type.cast(e));
+            if (e instanceof Annotation && skipAnnotationOwneds)
+                continue;
+            elements.addAll(e.getAllOwnedElements(type, skipAnnotationOwneds));
+        }
+        return elements;
+    }
+
     public final boolean hasOwnedElements() {
         return !ownedElements.isEmpty();
     }
 
-    public final <K extends Element> boolean deleteOwnedElement(K child){
+    public final <K extends Element> boolean deleteOwnedElement(K child) {
         return this.ownedElements.remove(child);
     }
 
@@ -120,15 +139,6 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         List<T> elements = new ArrayList<>();
         for (Element e : getOwnedElements())
             if (type.isInstance(e)) elements.add(type.cast(e));
-        return elements;
-    }
-
-    public final <T extends Element> List<T> getOwnedElementsInDepth(java.lang.Class<T> type) {
-        List<T> elements = new ArrayList<>();
-        for (Element e : getOwnedElements()) {
-            if (type.isInstance(e)) elements.add(type.cast(e));
-            elements.addAll(e.getOwnedElementsInDepth(type));
-        }
         return elements;
     }
 
@@ -219,6 +229,8 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
             System.out.print(" -- [" + Console.BLUE + ((Object) element).getURI().toString() + Console.RESET + "]");
         }
 //        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
+        if (element instanceof ITarget)
+            System.out.print(" (Path: " + Console.CYAN + ((ITarget) element).getRelativeSegment() + Console.RESET + ")");
         System.out.println();
         List<Element> elements = element.getOwnedElements();
         for (Element e : elements) {

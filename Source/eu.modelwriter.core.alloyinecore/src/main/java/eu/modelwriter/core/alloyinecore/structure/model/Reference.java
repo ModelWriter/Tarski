@@ -27,11 +27,19 @@ package eu.modelwriter.core.alloyinecore.structure.model;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.ISegment;
+import eu.modelwriter.core.alloyinecore.structure.base.ISource;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedClass;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedDataType;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EReference;
 
-public final class Reference extends StructuralFeature<EReference, EReferenceContext> implements IVisibility{
+import java.util.List;
+import java.util.stream.Collectors;
+
+public final class Reference extends StructuralFeature<EReference, EReferenceContext> implements IVisibility, ITarget, ISource {
     public Reference(EReference eReference, EReferenceContext context) {
         super(eReference, context);
     }
@@ -43,13 +51,15 @@ public final class Reference extends StructuralFeature<EReference, EReferenceCon
             String text = getContext().visibility.getText();
             try {
                 visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+            } catch (IllegalArgumentException e) {
+                visibility = Visibility.PACKAGE;
+            }
         }
         return visibility;
     }
 
     @Override
-    protected String getName(){
+    protected String getName() {
         if (this.getContext().name != null)
             return "::" + this.getContext().name.getText();
         else
@@ -83,7 +93,7 @@ public final class Reference extends StructuralFeature<EReference, EReferenceCon
         String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
         if (getContext().eReferenceType != null) {
             EGenericElementTypeContext ctx = getContext().eReferenceType;
-            String typeRefText =  Element.getNormalizedText(ctx);
+            String typeRefText = Element.getNormalizedText(ctx);
             return ": " + typeRefText + "" + multiplicity;
         } else {
             return ": " + multiplicity;
@@ -114,5 +124,19 @@ public final class Reference extends StructuralFeature<EReference, EReferenceCon
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitReference(this);
+    }
+
+    @Override
+    public String getSegment() {
+        return getContext().name != null ? getContext().name.getText() : ITarget.super.getSegment();
+    }
+
+    @Override
+    public List<ISegment> getTargets() {
+        return ISource.super.getTargets().stream()
+                .filter(e -> e instanceof Classifier ||
+                        e instanceof ImportedClass ||
+                        e instanceof ImportedDataType)
+                .collect(Collectors.toList());
     }
 }
