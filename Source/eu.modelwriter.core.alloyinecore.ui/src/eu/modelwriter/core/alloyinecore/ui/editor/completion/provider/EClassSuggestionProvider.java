@@ -1,7 +1,9 @@
 package eu.modelwriter.core.alloyinecore.ui.editor.completion.provider;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -18,6 +20,8 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantC
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.VisibilityKindContext;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIECompletionUtil;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -26,8 +30,7 @@ public class EClassSuggestionProvider extends AbstractAIESuggestionProvider {
   @Override
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
-    startSuggestions.addAll(
-        spFactory.visibilityKindSP().getStartSuggestions());
+    startSuggestions.addAll(spFactory.visibilityKindSP().getStartSuggestions());
     startSuggestions.add(CompletionTokens._abstract);
     startSuggestions.add(CompletionTokens._class);
     startSuggestions.add(CompletionTokens._interface);
@@ -42,8 +45,7 @@ public class EClassSuggestionProvider extends AbstractAIESuggestionProvider {
         suggestions.add(CompletionTokens._class);
         suggestions.add(CompletionTokens._interface);
       } else if (lastToken instanceof UnrestrictedNameContext) {
-        suggestions.addAll(spFactory.templateSignatureSP()
-            .getStartSuggestions());
+        suggestions.addAll(spFactory.templateSignatureSP().getStartSuggestions());
         suggestions.add(CompletionTokens._extends);
         suggestions.add(CompletionTokens._colon);
         suggestions.add(CompletionTokens._leftCurly);
@@ -61,22 +63,31 @@ public class EClassSuggestionProvider extends AbstractAIESuggestionProvider {
       } else if (lastToken instanceof EAnnotationContext || lastToken instanceof EOperationContext
           || lastToken instanceof EStructuralFeatureContext
           || lastToken instanceof InvariantContext) {
-        suggestions.addAll(
-            spFactory.eAnnotationSP().getStartSuggestions());
-        suggestions.addAll(
-            spFactory.eOperationSP().getStartSuggestions());
-        suggestions.addAll(spFactory.eStructuralFeatureSP()
-            .getStartSuggestions());
-        suggestions.addAll(
-            spFactory.invariantSP().getStartSuggestions());
+        suggestions.addAll(spFactory.eAnnotationSP().getStartSuggestions());
+        suggestions.addAll(spFactory.eOperationSP().getStartSuggestions());
+        suggestions.addAll(spFactory.eStructuralFeatureSP().getStartSuggestions());
+        suggestions.addAll(spFactory.invariantSP().getStartSuggestions());
       }
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._abstract)) {
         suggestions.add(CompletionTokens._class);
       } else if (lastToken.getText().equals(CompletionTokens._extends)) {
-        // TODO super types
+        // super type
+        final EClassContext fullContext = (EClassContext) AIECompletionUtil.getFullContext(context);
+        if (fullContext != null) {
+          final List<ITarget> targets = fullContext.current.getTargets().stream()
+              .map(e -> (ITarget) e).collect(Collectors.toList());
+          for (final ITarget target : targets) {
+            suggestions.add(target.getRelativeSegment());
+          }
+        }
       } else if (lastToken.getText().equals(CompletionTokens._comma)) {
-        // TODO super types
+        // super type
+        final List<ITarget> targets = ((EClassContext) context).current.getTargets().stream()
+            .map(e -> (ITarget) e).collect(Collectors.toList());
+        for (final ITarget target : targets) {
+          suggestions.add(target.getRelativeSegment());
+        }
       } else if (lastToken.getText().equals(CompletionTokens._colon)) {
         suggestions.add(CompletionTokens._singleQuote);
       } else if (((TerminalNode) lastToken).getSymbol()
@@ -84,14 +95,10 @@ public class EClassSuggestionProvider extends AbstractAIESuggestionProvider {
         suggestions.add(CompletionTokens._leftCurly);
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken.getText().equals(CompletionTokens._leftCurly)) {
-        suggestions.addAll(
-            spFactory.eAnnotationSP().getStartSuggestions());
-        suggestions.addAll(
-            spFactory.eOperationSP().getStartSuggestions());
-        suggestions.addAll(spFactory.eStructuralFeatureSP()
-            .getStartSuggestions());
-        suggestions.addAll(
-            spFactory.invariantSP().getStartSuggestions());
+        suggestions.addAll(spFactory.eAnnotationSP().getStartSuggestions());
+        suggestions.addAll(spFactory.eOperationSP().getStartSuggestions());
+        suggestions.addAll(spFactory.eStructuralFeatureSP().getStartSuggestions());
+        suggestions.addAll(spFactory.invariantSP().getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._rightCurly)
           || lastToken.getText().equals(CompletionTokens._semicolon)) {
         // end of context.

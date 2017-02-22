@@ -25,11 +25,11 @@ public class AIECompletionProcessor implements IContentAssistProcessor {
 
     final IDocument document = viewer.getDocument();
 
-    final AIECompletionUtil completionUtil = new AIECompletionUtil();
+    final AIECompletionUtil completionUtil = new AIECompletionUtil(document, offset);
 
     List<String> completionWords;
     try {
-      completionWords = completionUtil.getProposals(document, offset);
+      completionWords = completionUtil.getProposals();
     } catch (final BadLocationException e1) {
       return new ICompletionProposal[0];
     }

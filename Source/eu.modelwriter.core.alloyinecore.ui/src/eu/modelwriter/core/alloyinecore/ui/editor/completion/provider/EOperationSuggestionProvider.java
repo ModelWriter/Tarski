@@ -1,7 +1,9 @@
 package eu.modelwriter.core.alloyinecore.ui.editor.completion.provider;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -20,6 +22,8 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Preconditi
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.VisibilityKindContext;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIECompletionUtil;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -86,8 +90,26 @@ public class EOperationSuggestionProvider extends AbstractAIESuggestionProvider 
         suggestions.add(CompletionTokens._colon);
       } else if (lastToken.getText().equals(CompletionTokens._colon)) {
         // operation return type
+        final EOperationContext fullContext =
+            (EOperationContext) AIECompletionUtil.getFullContext(context);
+        if (fullContext != null) {
+          final List<ITarget> targets = fullContext.current.getTargets().stream()
+              .map(e -> (ITarget) e).collect(Collectors.toList());
+          for (final ITarget target : targets) {
+            suggestions.add(target.getRelativeSegment());
+          }
+        }
       } else if (lastToken.getText().equals(CompletionTokens._throws)) {
         // exception type
+        final EOperationContext fullContext =
+            (EOperationContext) AIECompletionUtil.getFullContext(context);
+        if (fullContext != null) {
+          final List<ITarget> targets = fullContext.current.getTargets().stream()
+              .map(e -> (ITarget) e).collect(Collectors.toList());
+          for (final ITarget target : targets) {
+            suggestions.add(target.getRelativeSegment());
+          }
+        }
       } else if (lastToken.getText().equals(CompletionTokens._leftCurly)) {
         suggestions.add(CompletionTokens._ordered);
         suggestions.add(CompletionTokens._notOrdered);

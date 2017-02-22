@@ -1,7 +1,9 @@
 package eu.modelwriter.core.alloyinecore.ui.editor.completion.provider;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -10,8 +12,11 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIECompletionUtil;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -28,8 +33,7 @@ public class EParameterSuggestionProvider extends AbstractAIESuggestionProvider 
       if (lastToken instanceof UnrestrictedNameContext) {
         suggestions.add(CompletionTokens._colon);
       } else if (lastToken instanceof EGenericElementTypeContext) {
-        suggestions.addAll(spFactory.multiplicitySP()
-            .getStartSuggestions());
+        suggestions.addAll(spFactory.multiplicitySP().getStartSuggestions());
         suggestions.add(CompletionTokens._leftCurly);
       } else if (lastToken instanceof EMultiplicityContext) {
         suggestions.add(CompletionTokens._leftCurly);
@@ -39,13 +43,21 @@ public class EParameterSuggestionProvider extends AbstractAIESuggestionProvider 
         suggestions.add(CompletionTokens._operation);
       } else if (lastToken.getText().equals(CompletionTokens._colon)) {
         // parameter type
+        final EOperationContext fullContext =
+            (EOperationContext) AIECompletionUtil.getFullContext(context.getParent());
+        if (fullContext != null) {
+          final List<ITarget> targets = fullContext.current.getTargets().stream()
+              .map(e -> (ITarget) e).collect(Collectors.toList());
+          for (final ITarget target : targets) {
+            suggestions.add(target.getRelativeSegment());
+          }
+        }
       } else if (lastToken.getText().equals(CompletionTokens._leftCurly)) {
         suggestions.add(CompletionTokens._ordered);
         suggestions.add(CompletionTokens._notOrdered);
         suggestions.add(CompletionTokens._unique);
         suggestions.add(CompletionTokens._notUnique);
-        suggestions.addAll(
-            spFactory.eAnnotationSP().getStartSuggestions());
+        suggestions.addAll(spFactory.eAnnotationSP().getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._comma)) {
         suggestions.add(CompletionTokens._ordered);
         suggestions.add(CompletionTokens._notOrdered);
@@ -81,7 +93,7 @@ public class EParameterSuggestionProvider extends AbstractAIESuggestionProvider 
   @Override
   protected void initChildProviders() {
     addChild(spFactory.unrestrictedNameSP());
-    // addChild(spFactory.eGenericElementTypeSP());
+    addChild(spFactory.eGenericElementTypeSP());
     addChild(spFactory.multiplicitySP());
     addChild(spFactory.eAnnotationSP());
   }
