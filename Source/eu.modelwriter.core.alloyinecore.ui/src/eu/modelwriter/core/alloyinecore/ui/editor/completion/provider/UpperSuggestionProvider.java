@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UpperContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class UpperSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -29,7 +28,7 @@ public class UpperSuggestionProvider extends AbstractAIESuggestionProvider {
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().multiplicitySP());
+    addParent(spFactory.multiplicitySP());
   }
 
   @Override

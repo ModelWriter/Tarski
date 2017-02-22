@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.VisibilityKindContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -32,13 +31,13 @@ public class VisibilityKindSuggestionProvider extends AbstractAIESuggestionProvi
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eClassSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eAttributeSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eReferenceSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eDatatypeSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eEnumSP());
+    addParent(spFactory.ePackageSP());
+    addParent(spFactory.eClassSP());
+    addParent(spFactory.eAttributeSP());
+    addParent(spFactory.eReferenceSP());
+    addParent(spFactory.eOperationSP());
+    addParent(spFactory.eDatatypeSP());
+    addParent(spFactory.eEnumSP());
   }
 
   @Override

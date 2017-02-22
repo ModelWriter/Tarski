@@ -20,7 +20,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Preconditi
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.VisibilityKindContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -30,7 +29,7 @@ public class EOperationSuggestionProvider extends AbstractAIESuggestionProvider 
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().visibilityKindSP().getStartSuggestions());
+        spFactory.visibilityKindSP().getStartSuggestions());
     startSuggestions.add(CompletionTokens._static);
     startSuggestions.add(CompletionTokens._operation);
     return startSuggestions;
@@ -50,7 +49,7 @@ public class EOperationSuggestionProvider extends AbstractAIESuggestionProvider 
         suggestions.add(CompletionTokens._comma);
         suggestions.add(CompletionTokens._rightParenthesis);
       } else if (lastToken instanceof EGenericElementTypeContext) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().multiplicitySP()
+        suggestions.addAll(spFactory.multiplicitySP()
             .getStartSuggestions());
         suggestions.add(CompletionTokens._throws);
         suggestions.add(CompletionTokens._leftCurly);
@@ -66,23 +65,23 @@ public class EOperationSuggestionProvider extends AbstractAIESuggestionProvider 
       } else if (lastToken instanceof EAnnotationContext || lastToken instanceof PreconditionContext
           || lastToken instanceof BodyContext || lastToken instanceof PostconditionContext) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().eAnnotationSP().getStartSuggestions());
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().preconditionSP()
+            spFactory.eAnnotationSP().getStartSuggestions());
+        suggestions.addAll(spFactory.preconditionSP()
             .getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().bodySP().getStartSuggestions());
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().postconditionSP()
+            spFactory.bodySP().getStartSuggestions());
+        suggestions.addAll(spFactory.postconditionSP()
             .getStartSuggestions());
       }
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._static)) {
         suggestions.add(CompletionTokens._operation);
       } else if (lastToken.getText().equals(CompletionTokens._operation)) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().templateSignatureSP()
+        suggestions.addAll(spFactory.templateSignatureSP()
             .getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._leftParenthesis)) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().eParameterSP().getStartSuggestions());
+            spFactory.eParameterSP().getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._rightParenthesis)) {
         suggestions.add(CompletionTokens._colon);
       } else if (lastToken.getText().equals(CompletionTokens._colon)) {
@@ -95,16 +94,16 @@ public class EOperationSuggestionProvider extends AbstractAIESuggestionProvider 
         suggestions.add(CompletionTokens._unique);
         suggestions.add(CompletionTokens._notUnique);
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().eAnnotationSP().getStartSuggestions());
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().preconditionSP()
+            spFactory.eAnnotationSP().getStartSuggestions());
+        suggestions.addAll(spFactory.preconditionSP()
             .getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().bodySP().getStartSuggestions());
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().postconditionSP()
+            spFactory.bodySP().getStartSuggestions());
+        suggestions.addAll(spFactory.postconditionSP()
             .getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._comma)) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().eParameterSP().getStartSuggestions());
+            spFactory.eParameterSP().getStartSuggestions());
         // exception types
         suggestions.add(CompletionTokens._ordered);
         suggestions.add(CompletionTokens._notOrdered);
@@ -121,7 +120,7 @@ public class EOperationSuggestionProvider extends AbstractAIESuggestionProvider 
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -133,23 +132,23 @@ public class EOperationSuggestionProvider extends AbstractAIESuggestionProvider 
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eTypedElementSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eClassSP());
+    addParent(spFactory.eTypedElementSP());
+    addParent(spFactory.eClassSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().visibilityKindSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().templateSignatureSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eParameterSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eGenericElementTypeSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().multiplicitySP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eGenericExceptionSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eAnnotationSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().preconditionSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().bodySP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().postconditionSP());
+    addChild(spFactory.visibilityKindSP());
+    addChild(spFactory.templateSignatureSP());
+    addChild(spFactory.unrestrictedNameSP());
+    addChild(spFactory.eParameterSP());
+    addChild(spFactory.eGenericElementTypeSP());
+    addChild(spFactory.multiplicitySP());
+    addChild(spFactory.eGenericExceptionSP());
+    addChild(spFactory.eAnnotationSP());
+    addChild(spFactory.preconditionSP());
+    addChild(spFactory.bodySP());
+    addChild(spFactory.postconditionSP());
   }
 
 }

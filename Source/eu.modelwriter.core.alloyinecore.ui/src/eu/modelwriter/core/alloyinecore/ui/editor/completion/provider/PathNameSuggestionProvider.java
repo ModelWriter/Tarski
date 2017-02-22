@@ -12,9 +12,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.SegmentContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
 public class PathNameSuggestionProvider extends AbstractAIESuggestionProvider {
 
@@ -27,25 +25,25 @@ public class PathNameSuggestionProvider extends AbstractAIESuggestionProvider {
   protected void computeSuggestions(final ParserRuleContext context, final ParseTree lastToken) {
     if (lastToken instanceof ParserRuleContext) {
       if (lastToken instanceof UnrestrictedNameContext) {
-        suggestions.add(CompletionTokens._dot);
-        suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().segmentSP().getStartSuggestions());
+        // suggestions.add(CompletionTokens._dot);
+        // suggestions.addAll(
+        // spFactory.segmentSP().getStartSuggestions());
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof SegmentContext) {
-        suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().segmentSP().getStartSuggestions());
+        // suggestions.addAll(
+        // spFactory.segmentSP().getStartSuggestions());
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       }
     } else if (lastToken instanceof TerminalNode) {
       if (((TerminalNode) lastToken).getSymbol().getType() == AlloyInEcoreLexer.INT) {
-        suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().segmentSP().getStartSuggestions());
+        // suggestions.addAll(
+        // spFactory.segmentSP().getStartSuggestions());
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -57,14 +55,14 @@ public class PathNameSuggestionProvider extends AbstractAIESuggestionProvider {
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eModelElementRefSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP());
+    addParent(spFactory.eModelElementRefSP());
+    addParent(spFactory.eGenericTypeSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().segmentSP());
+    addChild(spFactory.unrestrictedNameSP());
+    addChild(spFactory.segmentSP());
   }
 
 }

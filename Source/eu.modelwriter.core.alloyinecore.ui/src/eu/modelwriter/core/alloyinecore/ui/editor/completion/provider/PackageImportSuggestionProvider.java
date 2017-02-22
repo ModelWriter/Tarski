@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IdentifierContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;;
 
@@ -42,7 +41,7 @@ public class PackageImportSuggestionProvider extends AbstractAIESuggestionProvid
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -54,12 +53,12 @@ public class PackageImportSuggestionProvider extends AbstractAIESuggestionProvid
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().modelSP());
+    addParent(spFactory.modelSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().indentifierSP());
+    addChild(spFactory.indentifierSP());
   }
 
 }

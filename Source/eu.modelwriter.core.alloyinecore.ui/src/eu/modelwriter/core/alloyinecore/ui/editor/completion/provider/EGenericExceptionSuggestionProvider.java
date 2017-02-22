@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericExceptionContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class EGenericExceptionSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -16,19 +15,19 @@ public class EGenericExceptionSuggestionProvider extends AbstractAIESuggestionPr
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions
-        .addAll(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP()
-            .getStartSuggestions());
+    .addAll(spFactory.eGenericTypeSP()
+        .getStartSuggestions());
     return startSuggestions;
   }
 
   @Override
   protected void initParentProviders() {
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
+    parents.add(spFactory.eOperationSP());
   }
 
   @Override
   protected void initChildProviders() {
-    children.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP());
+    children.add(spFactory.eGenericTypeSP());
   }
 
   @Override

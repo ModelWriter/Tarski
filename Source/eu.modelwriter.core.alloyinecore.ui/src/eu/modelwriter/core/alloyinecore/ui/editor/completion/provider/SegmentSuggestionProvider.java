@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.SegmentContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -26,12 +25,12 @@ public class SegmentSuggestionProvider extends AbstractAIESuggestionProvider {
 
   @Override
   protected void initParentProviders() {
-    parents.add(AIESuggestionProviderSingletonFactory.instance().pathNameSP());
+    parents.add(spFactory.pathNameSP());
   }
 
   @Override
   protected void initChildProviders() {
-    children.add(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP());
+    children.add(spFactory.unrestrictedNameSP());
   }
 
   @Override
@@ -45,16 +44,16 @@ public class SegmentSuggestionProvider extends AbstractAIESuggestionProvider {
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._doubleColon)) {
         suggestions.add(CompletionTokens._at);
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP()
+        suggestions.addAll(spFactory.unrestrictedNameSP()
             .getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._at)) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP()
+        suggestions.addAll(spFactory.unrestrictedNameSP()
             .getStartSuggestions());
       } else if (((TerminalNode) lastToken).getSymbol().getType() == AlloyInEcoreLexer.INT) {
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }

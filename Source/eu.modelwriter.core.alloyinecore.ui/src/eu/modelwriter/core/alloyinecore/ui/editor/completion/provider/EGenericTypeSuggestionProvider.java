@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeArgumentContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -21,24 +20,24 @@ public class EGenericTypeSuggestionProvider extends AbstractAIESuggestionProvide
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().pathNameSP().getStartSuggestions());
+        spFactory.pathNameSP().getStartSuggestions());
     return startSuggestions;
   }
 
   @Override
   protected void initParentProviders() {
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eGenericExceptionSP());
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eGenericSuperTypeSP());
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eTypeParameterSP());
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeArgumentSP());
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eGenericElementTypeSP());
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eGenericWildcardSP());
+    parents.add(spFactory.eGenericExceptionSP());
+    parents.add(spFactory.eGenericSuperTypeSP());
+    parents.add(spFactory.eTypeParameterSP());
+    parents.add(spFactory.eGenericTypeArgumentSP());
+    parents.add(spFactory.eGenericElementTypeSP());
+    parents.add(spFactory.eGenericWildcardSP());
   }
 
   @Override
   protected void initChildProviders() {
-    children.add(AIESuggestionProviderSingletonFactory.instance().pathNameSP());
-    children.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeArgumentSP());
+    children.add(spFactory.pathNameSP());
+    children.add(spFactory.eGenericTypeArgumentSP());
   }
 
   @Override
@@ -55,13 +54,13 @@ public class EGenericTypeSuggestionProvider extends AbstractAIESuggestionProvide
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._leftArrow)
           || lastToken.getText().equals(CompletionTokens._comma)) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().eGenericTypeArgumentSP()
+        suggestions.addAll(spFactory.eGenericTypeArgumentSP()
             .getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._rightArrow)) {
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }

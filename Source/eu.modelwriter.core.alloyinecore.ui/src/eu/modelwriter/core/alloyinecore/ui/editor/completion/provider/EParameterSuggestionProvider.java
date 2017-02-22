@@ -12,7 +12,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericEl
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -29,7 +28,7 @@ public class EParameterSuggestionProvider extends AbstractAIESuggestionProvider 
       if (lastToken instanceof UnrestrictedNameContext) {
         suggestions.add(CompletionTokens._colon);
       } else if (lastToken instanceof EGenericElementTypeContext) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().multiplicitySP()
+        suggestions.addAll(spFactory.multiplicitySP()
             .getStartSuggestions());
         suggestions.add(CompletionTokens._leftCurly);
       } else if (lastToken instanceof EMultiplicityContext) {
@@ -46,7 +45,7 @@ public class EParameterSuggestionProvider extends AbstractAIESuggestionProvider 
         suggestions.add(CompletionTokens._unique);
         suggestions.add(CompletionTokens._notUnique);
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().eAnnotationSP().getStartSuggestions());
+            spFactory.eAnnotationSP().getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._comma)) {
         suggestions.add(CompletionTokens._ordered);
         suggestions.add(CompletionTokens._notOrdered);
@@ -63,7 +62,7 @@ public class EParameterSuggestionProvider extends AbstractAIESuggestionProvider 
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -75,16 +74,16 @@ public class EParameterSuggestionProvider extends AbstractAIESuggestionProvider 
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eTypedElementSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
+    addParent(spFactory.eTypedElementSP());
+    addParent(spFactory.eOperationSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP());
-    // addChild(AIESuggestionProviderSingletonFactory.instance().eGenericElementTypeSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().multiplicitySP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eAnnotationSP());
+    addChild(spFactory.unrestrictedNameSP());
+    // addChild(spFactory.eGenericElementTypeSP());
+    addChild(spFactory.multiplicitySP());
+    addChild(spFactory.eAnnotationSP());
   }
 
 }

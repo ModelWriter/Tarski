@@ -15,6 +15,12 @@ public abstract class AbstractAIESuggestionProvider implements AIESuggestionProv
   protected Set<String> suggestions;
   protected List<String> allPossibleTokens;
 
+  protected final AIESuggestionProviderFactory spFactory;
+
+  public AbstractAIESuggestionProvider() {
+    spFactory = new AIESuggestionProviderFactory();
+  }
+
   @Override
   public Set<String> getSuggestions(final ParserRuleContext context, final ParseTree lastToken) {
     suggestions = new HashSet<>();
@@ -44,8 +50,8 @@ public abstract class AbstractAIESuggestionProvider implements AIESuggestionProv
       final ParseTree lastToken) {
     final Set<String> suggestions = new HashSet<>();
     for (final ParseTree childContext : context.children) {
-      for (final AIESuggestionProvider childProvider : children) {
-        if (childContext instanceof ParserRuleContext) {
+      if (childContext instanceof ParserRuleContext) {
+        for (final AIESuggestionProvider childProvider : children) {
           suggestions
           .addAll(childProvider.getSuggestions((ParserRuleContext) childContext, lastToken));
         }

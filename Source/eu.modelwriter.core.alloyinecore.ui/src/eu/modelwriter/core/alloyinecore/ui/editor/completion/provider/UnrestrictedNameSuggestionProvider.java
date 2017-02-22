@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class UnrestrictedNameSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -29,18 +28,18 @@ public class UnrestrictedNameSuggestionProvider extends AbstractAIESuggestionPro
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eClassSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eAttributeSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eReferenceSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eParameterSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eDatatypeSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eEnumSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eEnumliteralSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eTypeParameterSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().pathNameSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().segmentSP());
+    addParent(spFactory.ePackageSP());
+    addParent(spFactory.eClassSP());
+    addParent(spFactory.eAttributeSP());
+    addParent(spFactory.eReferenceSP());
+    addParent(spFactory.eOperationSP());
+    addParent(spFactory.eParameterSP());
+    addParent(spFactory.eDatatypeSP());
+    addParent(spFactory.eEnumSP());
+    addParent(spFactory.eEnumliteralSP());
+    addParent(spFactory.eTypeParameterSP());
+    addParent(spFactory.pathNameSP());
+    addParent(spFactory.segmentSP());
   }
 
   @Override

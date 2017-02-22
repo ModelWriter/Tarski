@@ -12,7 +12,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IdentifierContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -52,13 +51,13 @@ public class InvariantSuggestionProvider extends AbstractAIESuggestionProvider {
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken.getText().equals(CompletionTokens._colon)) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().formulaSP().getStartSuggestions());
+            spFactory.formulaSP().getStartSuggestions());
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken.getText().equals(CompletionTokens._semicolon)) {
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -70,16 +69,16 @@ public class InvariantSuggestionProvider extends AbstractAIESuggestionProvider {
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eClassSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eDatatypeSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eEnumSP());
+    addParent(spFactory.ePackageSP());
+    addParent(spFactory.eClassSP());
+    addParent(spFactory.eDatatypeSP());
+    addParent(spFactory.eEnumSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().indentifierSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().formulaSP());
+    addChild(spFactory.indentifierSP());
+    addChild(spFactory.formulaSP());
   }
 
 }

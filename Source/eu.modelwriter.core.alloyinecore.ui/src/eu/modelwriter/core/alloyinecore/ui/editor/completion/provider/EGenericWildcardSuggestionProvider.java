@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericWildcardContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -25,12 +24,12 @@ public class EGenericWildcardSuggestionProvider extends AbstractAIESuggestionPro
 
   @Override
   protected void initParentProviders() {
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeArgumentSP());
+    parents.add(spFactory.eGenericTypeArgumentSP());
   }
 
   @Override
   protected void initChildProviders() {
-    children.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP());
+    children.add(spFactory.eGenericTypeSP());
   }
 
   @Override
@@ -46,10 +45,10 @@ public class EGenericWildcardSuggestionProvider extends AbstractAIESuggestionPro
         suggestions.add(CompletionTokens._super);
       } else if (lastToken.getText().equals(CompletionTokens._extends)
           || lastToken.getText().equals(CompletionTokens._super)) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP()
+        suggestions.addAll(spFactory.eGenericTypeSP()
             .getStartSuggestions());
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }

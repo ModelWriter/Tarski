@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ENamedElementContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class ENamedElementSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -16,13 +15,13 @@ public class ENamedElementSuggestionProvider extends AbstractAIESuggestionProvid
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eTypedElementSP().getStartSuggestions());
+        spFactory.eTypedElementSP().getStartSuggestions());
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eClassifierSP().getStartSuggestions());
+        spFactory.eClassifierSP().getStartSuggestions());
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().ePackageSP().getStartSuggestions());
+        spFactory.ePackageSP().getStartSuggestions());
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eEnumliteralSP().getStartSuggestions());
+        spFactory.eEnumliteralSP().getStartSuggestions());
     return startSuggestions;
   }
 
@@ -38,15 +37,15 @@ public class ENamedElementSuggestionProvider extends AbstractAIESuggestionProvid
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eModelElementSP());
+    addParent(spFactory.eModelElementSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().eTypedElementSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eClassifierSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eEnumliteralSP());
+    addChild(spFactory.eTypedElementSP());
+    addChild(spFactory.eClassifierSP());
+    addChild(spFactory.ePackageSP());
+    addChild(spFactory.eEnumliteralSP());
   }
 
 }

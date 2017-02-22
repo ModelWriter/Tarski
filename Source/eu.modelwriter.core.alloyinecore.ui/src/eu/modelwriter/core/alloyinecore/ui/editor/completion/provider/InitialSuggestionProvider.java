@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ExpressionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IdentifierContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InitialContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -39,13 +38,13 @@ public class InitialSuggestionProvider extends AbstractAIESuggestionProvider {
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken.getText().equals(CompletionTokens._colon)) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().expressionSP().getStartSuggestions());
+            spFactory.expressionSP().getStartSuggestions());
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken.getText().equals(CompletionTokens._semicolon)) {
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -57,14 +56,14 @@ public class InitialSuggestionProvider extends AbstractAIESuggestionProvider {
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eAttributeSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eReferenceSP());
+    addParent(spFactory.eAttributeSP());
+    addParent(spFactory.eReferenceSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().indentifierSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().expressionSP());
+    addChild(spFactory.indentifierSP());
+    addChild(spFactory.expressionSP());
   }
 
 }

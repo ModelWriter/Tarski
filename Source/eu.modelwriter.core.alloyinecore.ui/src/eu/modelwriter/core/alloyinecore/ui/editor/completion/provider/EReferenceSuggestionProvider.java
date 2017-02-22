@@ -17,7 +17,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReference
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InitialContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.VisibilityKindContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -27,7 +26,7 @@ public class EReferenceSuggestionProvider extends AbstractAIESuggestionProvider 
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().visibilityKindSP().getStartSuggestions());
+        spFactory.visibilityKindSP().getStartSuggestions());
     startSuggestions.add(CompletionTokens._static);
     startSuggestions.add(CompletionTokens._model);
     startSuggestions.add(CompletionTokens._ghost);
@@ -35,7 +34,7 @@ public class EReferenceSuggestionProvider extends AbstractAIESuggestionProvider 
     startSuggestions.add(CompletionTokens._volatile);
     startSuggestions.add(CompletionTokens._readonly);
     startSuggestions.add(CompletionTokens._property);
-    return suggestions;
+    return startSuggestions;
   }
 
   @Override
@@ -53,7 +52,7 @@ public class EReferenceSuggestionProvider extends AbstractAIESuggestionProvider 
         suggestions.add(CompletionTokens._sharp);
         suggestions.add(CompletionTokens._colon);
       } else if (lastToken instanceof EGenericElementTypeContext) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().multiplicitySP()
+        suggestions.addAll(spFactory.multiplicitySP()
             .getStartSuggestions());
         suggestions.add(CompletionTokens._equals);
         suggestions.add(CompletionTokens._leftCurly);
@@ -64,14 +63,14 @@ public class EReferenceSuggestionProvider extends AbstractAIESuggestionProvider 
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken instanceof EAnnotationContext) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().eAnnotationSP().getStartSuggestions());
+            spFactory.eAnnotationSP().getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().derivationSP().getStartSuggestions());
+            spFactory.derivationSP().getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().initialSP().getStartSuggestions());
+            spFactory.initialSP().getStartSuggestions());
       } else if (lastToken instanceof DerivationContext || lastToken instanceof InitialContext) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().eAnnotationSP().getStartSuggestions());
+            spFactory.eAnnotationSP().getStartSuggestions());
       }
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._static)) {
@@ -121,11 +120,11 @@ public class EReferenceSuggestionProvider extends AbstractAIESuggestionProvider 
         suggestions.add(CompletionTokens._unsettable);
         suggestions.add(CompletionTokens._notUnsettable);
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().eAnnotationSP().getStartSuggestions());
+            spFactory.eAnnotationSP().getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().derivationSP().getStartSuggestions());
+            spFactory.derivationSP().getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().initialSP().getStartSuggestions());
+            spFactory.initialSP().getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._comma)) {
         suggestions.add(CompletionTokens._composes);
         suggestions.add(CompletionTokens._derived);
@@ -154,7 +153,7 @@ public class EReferenceSuggestionProvider extends AbstractAIESuggestionProvider 
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -166,18 +165,18 @@ public class EReferenceSuggestionProvider extends AbstractAIESuggestionProvider 
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eStructuralFeatureSP());
+    addParent(spFactory.eStructuralFeatureSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().visibilityKindSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eGenericElementTypeSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().multiplicitySP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eAnnotationSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().derivationSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().initialSP());
+    addChild(spFactory.visibilityKindSP());
+    addChild(spFactory.unrestrictedNameSP());
+    addChild(spFactory.eGenericElementTypeSP());
+    addChild(spFactory.multiplicitySP());
+    addChild(spFactory.eAnnotationSP());
+    addChild(spFactory.derivationSP());
+    addChild(spFactory.initialSP());
   }
 
 }

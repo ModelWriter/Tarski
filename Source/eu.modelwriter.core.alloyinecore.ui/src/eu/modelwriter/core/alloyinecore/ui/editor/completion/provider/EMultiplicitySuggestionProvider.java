@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.LowerContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UpperContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -50,7 +49,7 @@ public class EMultiplicitySuggestionProvider extends AbstractAIESuggestionProvid
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -62,16 +61,16 @@ public class EMultiplicitySuggestionProvider extends AbstractAIESuggestionProvid
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eAttributeSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eReferenceSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eParameterSP());
+    addParent(spFactory.eAttributeSP());
+    addParent(spFactory.eReferenceSP());
+    addParent(spFactory.eOperationSP());
+    addParent(spFactory.eParameterSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().lowerSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().upperSP());
+    addChild(spFactory.lowerSP());
+    addChild(spFactory.upperSP());
   }
 
 }

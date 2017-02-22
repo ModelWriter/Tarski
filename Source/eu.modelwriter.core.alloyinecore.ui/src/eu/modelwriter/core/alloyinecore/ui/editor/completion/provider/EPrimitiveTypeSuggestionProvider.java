@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitiveTypeContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -22,7 +21,7 @@ public class EPrimitiveTypeSuggestionProvider extends AbstractAIESuggestionProvi
 
   @Override
   protected void initParentProviders() {
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eGenericElementTypeSP());
+    parents.add(spFactory.eGenericElementTypeSP());
   }
 
   @Override

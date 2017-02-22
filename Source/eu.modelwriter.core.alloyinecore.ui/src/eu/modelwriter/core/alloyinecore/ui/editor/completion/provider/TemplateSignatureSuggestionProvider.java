@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -33,13 +32,13 @@ public class TemplateSignatureSuggestionProvider extends AbstractAIESuggestionPr
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._leftArrow)
           || lastToken.getText().equals(CompletionTokens._comma)) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().eTypeParameterSP()
+        suggestions.addAll(spFactory.eTypeParameterSP()
             .getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._rightArrow)) {
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -51,15 +50,15 @@ public class TemplateSignatureSuggestionProvider extends AbstractAIESuggestionPr
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eClassSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eDatatypeSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eEnumSP());
+    addParent(spFactory.eClassSP());
+    addParent(spFactory.eOperationSP());
+    addParent(spFactory.eDatatypeSP());
+    addParent(spFactory.eEnumSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().eTypeParameterSP());
+    addChild(spFactory.eTypeParameterSP());
   }
 
 }

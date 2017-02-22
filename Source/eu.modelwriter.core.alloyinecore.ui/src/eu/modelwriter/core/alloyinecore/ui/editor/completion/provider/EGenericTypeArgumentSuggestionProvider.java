@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeArgumentContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class EGenericTypeArgumentSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -16,21 +15,21 @@ public class EGenericTypeArgumentSuggestionProvider extends AbstractAIESuggestio
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP().getStartSuggestions());
-    startSuggestions.addAll(AIESuggestionProviderSingletonFactory.instance().eGenericWildcardSP()
+        spFactory.eGenericTypeSP().getStartSuggestions());
+    startSuggestions.addAll(spFactory.eGenericWildcardSP()
         .getStartSuggestions());
     return startSuggestions;
   }
 
   @Override
   protected void initParentProviders() {
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP());
+    parents.add(spFactory.eGenericTypeSP());
   }
 
   @Override
   protected void initChildProviders() {
-    children.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP());
-    children.add(AIESuggestionProviderSingletonFactory.instance().eGenericWildcardSP());
+    children.add(spFactory.eGenericTypeSP());
+    children.add(spFactory.eGenericWildcardSP());
   }
 
   @Override

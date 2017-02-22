@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -32,12 +31,12 @@ public class EModelElementRefSuggestionProvider extends AbstractAIESuggestionPro
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._reference)) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().pathNameSP().getStartSuggestions());
+            spFactory.pathNameSP().getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._semicolon)) {
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -49,12 +48,12 @@ public class EModelElementRefSuggestionProvider extends AbstractAIESuggestionPro
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eAnnotationSP());
+    addParent(spFactory.eAnnotationSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().pathNameSP());
+    addChild(spFactory.pathNameSP());
   }
 
 }

@@ -17,6 +17,8 @@ public class SuggestionDetector {
   private final ParserRuleContext parentOfCloserNode;
   private final ParseTree closerNode;
 
+  private final AIESuggestionProviderFactory spFactory;
+
   public SuggestionDetector(final IDocument document, final int offset,
       final ParserRuleContext parentOfCloserNode, final ParseTree closerNode) {
     this.document = document;
@@ -24,12 +26,14 @@ public class SuggestionDetector {
     this.parentOfCloserNode = parentOfCloserNode;
     this.closerNode = closerNode;
     suggestionProviders = new ArrayList<>();
+
+    spFactory = new AIESuggestionProviderFactory();
     initSuggestionProviders();
   }
 
   private void initSuggestionProviders() {
     suggestionProviders
-    .addAll(AIESuggestionProviderSingletonFactory.instance().allSuggestionProviders());
+        .addAll(spFactory.allSuggestionProviders());
   }
 
   public Set<String> detect() {

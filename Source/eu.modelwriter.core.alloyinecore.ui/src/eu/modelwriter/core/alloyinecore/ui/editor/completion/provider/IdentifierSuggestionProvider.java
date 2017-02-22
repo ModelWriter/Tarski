@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IdentifierContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class IdentifierSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -29,16 +28,16 @@ public class IdentifierSuggestionProvider extends AbstractAIESuggestionProvider 
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().modelSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().packageImportSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().bodySP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().invariantSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().preconditionSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().postconditionSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().initialSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().derivationSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP());
+    addParent(spFactory.modelSP());
+    addParent(spFactory.packageImportSP());
+    addParent(spFactory.ePackageSP());
+    addParent(spFactory.bodySP());
+    addParent(spFactory.invariantSP());
+    addParent(spFactory.preconditionSP());
+    addParent(spFactory.postconditionSP());
+    addParent(spFactory.initialSP());
+    addParent(spFactory.derivationSP());
+    addParent(spFactory.unrestrictedNameSP());
   }
 
   @Override

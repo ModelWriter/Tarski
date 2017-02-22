@@ -12,7 +12,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Identifier
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModelContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -22,12 +21,12 @@ public class ModelSuggestionProvider extends AbstractAIESuggestionProvider {
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions
-    .addAll(AIESuggestionProviderSingletonFactory.instance().optionsSP().getStartSuggestions());
+        .addAll(spFactory.optionsSP().getStartSuggestions());
     startSuggestions.add(CompletionTokens._model);
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().packageImportSP().getStartSuggestions());
+        spFactory.packageImportSP().getStartSuggestions());
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().ePackageSP().getStartSuggestions());
+        spFactory.ePackageSP().getStartSuggestions());
     return startSuggestions;
   }
 
@@ -38,26 +37,26 @@ public class ModelSuggestionProvider extends AbstractAIESuggestionProvider {
         suggestions.addAll(getStartSuggestions());
       } else if (lastToken instanceof OptionsContext) {
         suggestions.add(CompletionTokens._model);
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().packageImportSP()
+        suggestions.addAll(spFactory.packageImportSP()
             .getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().ePackageSP().getStartSuggestions());
+            spFactory.ePackageSP().getStartSuggestions());
       } else if (lastToken instanceof IdentifierContext) {
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken instanceof PackageImportContext) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().packageImportSP()
+        suggestions.addAll(spFactory.packageImportSP()
             .getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().ePackageSP().getStartSuggestions());
+            spFactory.ePackageSP().getStartSuggestions());
       }
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._semicolon)) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().packageImportSP()
+        suggestions.addAll(spFactory.packageImportSP()
             .getStartSuggestions());
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().ePackageSP().getStartSuggestions());
+            spFactory.ePackageSP().getStartSuggestions());
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -75,10 +74,10 @@ public class ModelSuggestionProvider extends AbstractAIESuggestionProvider {
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().optionsSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().indentifierSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().packageImportSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
+    addChild(spFactory.optionsSP());
+    addChild(spFactory.indentifierSP());
+    addChild(spFactory.packageImportSP());
+    addChild(spFactory.ePackageSP());
   }
 
 }

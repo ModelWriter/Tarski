@@ -12,7 +12,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IdentifierContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -51,13 +50,13 @@ public class PreconditionSuggestionProvider extends AbstractAIESuggestionProvide
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken.getText().equals(CompletionTokens._colon)) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().formulaSP().getStartSuggestions());
+            spFactory.formulaSP().getStartSuggestions());
         suggestions.add(CompletionTokens._semicolon);
       } else if (lastToken.getText().equals(CompletionTokens._semicolon)) {
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -69,13 +68,13 @@ public class PreconditionSuggestionProvider extends AbstractAIESuggestionProvide
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
+    addParent(spFactory.eOperationSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().indentifierSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().formulaSP());
+    addChild(spFactory.indentifierSP());
+    addChild(spFactory.formulaSP());
   }
 
 }

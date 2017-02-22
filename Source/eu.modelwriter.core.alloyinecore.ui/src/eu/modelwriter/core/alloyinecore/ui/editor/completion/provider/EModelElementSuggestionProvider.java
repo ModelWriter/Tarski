@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class EModelElementSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -16,9 +15,9 @@ public class EModelElementSuggestionProvider extends AbstractAIESuggestionProvid
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eAnnotationSP().getStartSuggestions());
+        spFactory.eAnnotationSP().getStartSuggestions());
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eNamedElementSP().getStartSuggestions());
+        spFactory.eNamedElementSP().getStartSuggestions());
     return startSuggestions;
   }
 
@@ -34,13 +33,13 @@ public class EModelElementSuggestionProvider extends AbstractAIESuggestionProvid
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eAnnotationSP());
+    addParent(spFactory.eAnnotationSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().eAnnotationSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eNamedElementSP());
+    addChild(spFactory.eAnnotationSP());
+    addChild(spFactory.eNamedElementSP());
   }
 
 }

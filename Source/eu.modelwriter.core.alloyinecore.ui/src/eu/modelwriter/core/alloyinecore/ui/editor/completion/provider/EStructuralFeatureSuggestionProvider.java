@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class EStructuralFeatureSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -16,9 +15,9 @@ public class EStructuralFeatureSuggestionProvider extends AbstractAIESuggestionP
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eAttributeSP().getStartSuggestions());
+        spFactory.eAttributeSP().getStartSuggestions());
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eReferenceSP().getStartSuggestions());
+        spFactory.eReferenceSP().getStartSuggestions());
     return startSuggestions;
   }
 
@@ -34,14 +33,14 @@ public class EStructuralFeatureSuggestionProvider extends AbstractAIESuggestionP
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().eTypedElementSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eClassSP());
+    addParent(spFactory.eTypedElementSP());
+    addParent(spFactory.eClassSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().eAttributeSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eReferenceSP());
+    addChild(spFactory.eAttributeSP());
+    addChild(spFactory.eReferenceSP());
   }
 
 }

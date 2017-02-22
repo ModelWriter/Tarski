@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericSuperTypeContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class EGenericSuperTypeSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -16,18 +15,18 @@ public class EGenericSuperTypeSuggestionProvider extends AbstractAIESuggestionPr
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP().getStartSuggestions());
+        spFactory.eGenericTypeSP().getStartSuggestions());
     return startSuggestions;
   }
 
   @Override
   protected void initParentProviders() {
-    parents.add(AIESuggestionProviderSingletonFactory.instance().eClassSP());
+    parents.add(spFactory.eClassSP());
   }
 
   @Override
   protected void initChildProviders() {
-    children.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP());
+    children.add(spFactory.eGenericTypeSP());
   }
 
   @Override

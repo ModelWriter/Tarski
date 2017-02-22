@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -36,12 +35,12 @@ public class OptionsSuggestionProvider extends AbstractAIESuggestionProvider {
       } else if (lastToken.getText().equals(CompletionTokens._leftCurly)
           || lastToken.getText().equals(CompletionTokens._comma)) {
         suggestions.addAll(
-            AIESuggestionProviderSingletonFactory.instance().optionSP().getStartSuggestions());
+            spFactory.optionSP().getStartSuggestions());
       } else if (lastToken.getText().equals(CompletionTokens._rightCurly)) {
         // end of context.
         suggestions.addAll(getParentProviderSuggestions(context, lastToken));
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -53,12 +52,12 @@ public class OptionsSuggestionProvider extends AbstractAIESuggestionProvider {
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().modelSP());
+    addParent(spFactory.modelSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().optionSP());
+    addChild(spFactory.optionSP());
   }
 
 }

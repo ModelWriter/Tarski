@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -24,13 +23,13 @@ public class ETypeParameterSuggestionProvider extends AbstractAIESuggestionProvi
 
   @Override
   protected void initParentProviders() {
-    parents.add(AIESuggestionProviderSingletonFactory.instance().templateSignatureSP());
+    parents.add(spFactory.templateSignatureSP());
   }
 
   @Override
   protected void initChildProviders() {
-    children.add(AIESuggestionProviderSingletonFactory.instance().unrestrictedNameSP());
-    children.add(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP());
+    children.add(spFactory.unrestrictedNameSP());
+    children.add(spFactory.eGenericTypeSP());
   }
 
   @Override
@@ -48,10 +47,10 @@ public class ETypeParameterSuggestionProvider extends AbstractAIESuggestionProvi
     } else if (lastToken instanceof TerminalNode) {
       if (lastToken.getText().equals(CompletionTokens._extends)
           || lastToken.getText().equals(CompletionTokens._ampersand)) {
-        suggestions.addAll(AIESuggestionProviderSingletonFactory.instance().eGenericTypeSP()
+        suggestions.addAll(spFactory.eGenericTypeSP()
             .getStartSuggestions());
       } else if (lastToken instanceof ErrorNode) {
-        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
+        // suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }

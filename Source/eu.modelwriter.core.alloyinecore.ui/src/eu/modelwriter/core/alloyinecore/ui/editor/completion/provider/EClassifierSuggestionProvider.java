@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassifierContext;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
 public class EClassifierSuggestionProvider extends AbstractAIESuggestionProvider {
@@ -16,11 +15,11 @@ public class EClassifierSuggestionProvider extends AbstractAIESuggestionProvider
   public Set<String> getStartSuggestions() {
     final Set<String> startSuggestions = new HashSet<>();
     startSuggestions
-        .addAll(AIESuggestionProviderSingletonFactory.instance().eClassSP().getStartSuggestions());
+    .addAll(spFactory.eClassSP().getStartSuggestions());
     startSuggestions.addAll(
-        AIESuggestionProviderSingletonFactory.instance().eDatatypeSP().getStartSuggestions());
+        spFactory.eDatatypeSP().getStartSuggestions());
     startSuggestions
-        .addAll(AIESuggestionProviderSingletonFactory.instance().eEnumSP().getStartSuggestions());
+    .addAll(spFactory.eEnumSP().getStartSuggestions());
     return startSuggestions;
   }
 
@@ -36,15 +35,15 @@ public class EClassifierSuggestionProvider extends AbstractAIESuggestionProvider
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eNamedElementSP());
+    addParent(spFactory.ePackageSP());
+    addParent(spFactory.eNamedElementSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().eClassSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eDatatypeSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eEnumSP());
+    addChild(spFactory.eClassSP());
+    addChild(spFactory.eDatatypeSP());
+    addChild(spFactory.eEnumSP());
   }
 
 }
