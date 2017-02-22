@@ -8,6 +8,8 @@ import java.util.Set;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.model.AIEModelSuggestionProviderFactory;
+
 public abstract class AbstractAIESuggestionProvider implements AIESuggestionProvider {
 
   protected List<AIESuggestionProvider> children;
@@ -15,10 +17,10 @@ public abstract class AbstractAIESuggestionProvider implements AIESuggestionProv
   protected Set<String> suggestions;
   protected List<String> allPossibleTokens;
 
-  protected final AIESuggestionProviderFactory spFactory;
+  protected final AIEModelSuggestionProviderFactory spFactory;
 
   public AbstractAIESuggestionProvider() {
-    spFactory = new AIESuggestionProviderFactory();
+    spFactory = new AIEModelSuggestionProviderFactory();
   }
 
   @Override

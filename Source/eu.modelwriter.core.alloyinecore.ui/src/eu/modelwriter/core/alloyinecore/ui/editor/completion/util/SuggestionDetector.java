@@ -9,6 +9,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.text.IDocument;
 
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.model.AIEModelSuggestionProviderFactory;
+
 public class SuggestionDetector {
   private final List<AIESuggestionProvider> suggestionProviders;
 
@@ -17,7 +19,7 @@ public class SuggestionDetector {
   private final ParserRuleContext parentOfCloserNode;
   private final ParseTree closerNode;
 
-  private final AIESuggestionProviderFactory spFactory;
+  private final AIEModelSuggestionProviderFactory spFactory;
 
   public SuggestionDetector(final IDocument document, final int offset,
       final ParserRuleContext parentOfCloserNode, final ParseTree closerNode) {
@@ -27,7 +29,7 @@ public class SuggestionDetector {
     this.closerNode = closerNode;
     suggestionProviders = new ArrayList<>();
 
-    spFactory = new AIESuggestionProviderFactory();
+    spFactory = new AIEModelSuggestionProviderFactory();
     initSuggestionProviders();
   }
 
