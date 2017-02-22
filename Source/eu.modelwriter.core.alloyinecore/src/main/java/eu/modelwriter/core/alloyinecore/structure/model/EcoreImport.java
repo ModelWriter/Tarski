@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 
-public final class EcoreImport extends Import{
+public final class EcoreImport extends Import {
 
     public EcoreImport(EObject eObject, PackageImportContext context) {
         super(eObject, context);
@@ -52,37 +52,34 @@ public final class EcoreImport extends Import{
     }
 
     @Override
-    public void loadNamespace(Repository repository){
+    public void loadNamespace(Repository repository) {
         //http://docs.oracle.com/javase/7/docs/technotes/guides/lang/resources.html
-        if (getPath() != null) {
+        Resource resource = getResource();
 
-            Resource resource = getResource();
+        ClassLoader classLoader = INamespace.class.getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(getPath());
 
-            ClassLoader classLoader = INamespace.class.getClassLoader();
-            InputStream inputStream = classLoader.getResourceAsStream(getPath());
-
-            if (resource.getURI().isFile()) {
-                System.out.println("[" + getKey() +"] Resource is file in the classpath");
-            } else if (resource.getURI().isPlatform()) {
-                System.out.println("[" + getKey() +"] Resource is platform");
-            } else if (resource.getURI().isPlatformPlugin()) {
-                System.out.println("[" + getKey() +"] Resource is platform plugin");
-            } else if (resource.getURI().isPlatformResource()) {
-                System.out.println("[" + getKey() +"] Resource is platform resource");
-            } else {
-                System.out.println("[" + getKey() +"] Resource is file in the JAR");
-            }
-
-            System.out.print(" [" + classLoader.getResource(getPath()).getFile() + "]");
-            System.out.println();
-
-            ANTLRInputStream input = null;
-            try {
-                input = new ANTLRInputStream(inputStream);
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-            Repository.importPackage(input, this);
+        if (resource.getURI().isFile()) {
+            System.out.println("[" + getKey() + "] Resource is file in the classpath");
+        } else if (resource.getURI().isPlatform()) {
+            System.out.println("[" + getKey() + "] Resource is platform");
+        } else if (resource.getURI().isPlatformPlugin()) {
+            System.out.println("[" + getKey() + "] Resource is platform plugin");
+        } else if (resource.getURI().isPlatformResource()) {
+            System.out.println("[" + getKey() + "] Resource is platform resource");
+        } else {
+            System.out.println("[" + getKey() + "] Resource is file in the JAR");
         }
+
+        System.out.print(" [" + classLoader.getResource(getPath()).getFile() + "]");
+        System.out.println();
+
+        ANTLRInputStream input = null;
+        try {
+            input = new ANTLRInputStream(inputStream);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        Repository.importPackage(input, this);
     }
 }

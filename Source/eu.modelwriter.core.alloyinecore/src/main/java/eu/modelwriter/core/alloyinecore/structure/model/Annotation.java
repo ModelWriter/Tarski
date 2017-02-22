@@ -25,10 +25,11 @@
 package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAnnotationContext;
+import eu.modelwriter.core.alloyinecore.structure.base.ISource;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.eclipse.emf.ecore.EAnnotation;
 
-public class Annotation extends ModelElement<EAnnotation, EAnnotationContext> {
+public class Annotation extends ModelElement<EAnnotation, EAnnotationContext> implements ISource{
 
     public Annotation(EAnnotation eAnnotation, EAnnotationContext context) {
         super(eAnnotation, context);

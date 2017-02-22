@@ -25,17 +25,17 @@
 package eu.modelwriter.core.alloyinecore.structure.imports;
 
 import eu.modelwriter.core.alloyinecore.recognizer.imports.ImportsParser;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
 import eu.modelwriter.core.alloyinecore.structure.model.IVisibility;
 import eu.modelwriter.core.alloyinecore.structure.model.Visibility;
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
-import eu.modelwriter.core.alloyinecore.structure.base.IName;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 
 import java.util.stream.Collectors;
 
-public class ImportedClass extends Element<ImportsParser.IClassContext> implements IVisibility, IName {
+public class ImportedClass extends Element<ImportsParser.IClassContext> implements IVisibility, ITarget {
 
     public ImportedClass(ImportsParser.IClassContext context) {
         super(context);
@@ -48,13 +48,20 @@ public class ImportedClass extends Element<ImportsParser.IClassContext> implemen
             String text = getContext().visibility().getText();
             try {
                 visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+            } catch (IllegalArgumentException e) {
+                visibility = Visibility.PACKAGE;
+            }
         }
         return visibility;
     }
 
     @Override
-    protected String getName(){
+    public String getSegment() {
+        return getContext().name != null ? getContext().name.getText() : ITarget.super.getSegment();
+    }
+
+    @Override
+    protected String getName() {
         if (this.getContext().name != null)
             return ":" + this.getContext().name.getText();
         else
@@ -81,16 +88,16 @@ public class ImportedClass extends Element<ImportsParser.IClassContext> implemen
             stop = getContext().stop.getStopIndex();
         }
 
-        if (getContext().templateSignature() != null){
+        if (getContext().templateSignature() != null) {
             stop = getContext().templateSignature().stop.getStopIndex();
         }
-        return  Element.getNormalizedText(getContext(), start, stop);
+        return Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override
     public String getSuffix() {
         if (!getContext().iGenericType().isEmpty()) {
-            return ": " + String.join(", " , this.getContext().iGenericType().stream().map(RuleContext::getText).collect(Collectors.toList()));
+            return ": " + String.join(", ", this.getContext().iGenericType().stream().map(RuleContext::getText).collect(Collectors.toList()));
         } else {
             return "";
         }
@@ -117,7 +124,7 @@ public class ImportedClass extends Element<ImportsParser.IClassContext> implemen
         else return super.getLine();
     }
 
-    public boolean isAbstract(){
+    public boolean isAbstract() {
         return getContext().isAbstract != null;
     }
 

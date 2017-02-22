@@ -49,6 +49,7 @@ package eu.modelwriter.core.alloyinecore;/*
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
+import eu.modelwriter.core.alloyinecore.typechecking.TypeChecker;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
@@ -81,7 +82,6 @@ public class AlloyInECoreFrontEnd_Test {
         parser.setErrorHandler(new DefaultErrorStrategy());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
         parser.model();
-
 //        parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
 //        // we don't want error messages or recovery during first try
 //        parser.removeErrorListeners();
@@ -105,6 +105,9 @@ public class AlloyInECoreFrontEnd_Test {
 //            }
 //        }
         parser.saveResource(file.getName().substring(0, file.getName().indexOf(".")), "./src/test/resources/out/");
+
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(parser.model);
 
 //    Utilities.showParseTree(parser, tree);
 

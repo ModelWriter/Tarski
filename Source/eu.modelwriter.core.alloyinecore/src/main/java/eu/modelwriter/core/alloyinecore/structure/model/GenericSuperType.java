@@ -42,4 +42,5 @@ public final class GenericSuperType extends Object<EGenericType, EGenericSuperTy
     public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitGenericSuperType(this);
     }
+
 }

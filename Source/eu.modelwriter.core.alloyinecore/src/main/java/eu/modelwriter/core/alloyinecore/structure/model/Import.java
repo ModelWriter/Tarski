@@ -25,8 +25,10 @@
 package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
-import eu.modelwriter.core.alloyinecore.structure.base.*;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.INamespace;
 import eu.modelwriter.core.alloyinecore.structure.base.Object;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
 import eu.modelwriter.core.alloyinecore.translator.EcoreInstanceTranslator;
 import eu.modelwriter.core.alloyinecore.translator.EcoreTranslator;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
@@ -37,7 +39,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Import extends Object<EObject, PackageImportContext> implements INamespace {
 
@@ -53,41 +54,40 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
     }
 
     @Override
-    public void loadNamespace(Repository repository){
+    public void loadNamespace(Repository repository) {
         if (getPath() != null) {
             Resource resource = getResource();
             String recore;
             if (resource.getURI().isFile()) {
-                System.out.println("[" + getKey() +"] Resource is file in the classpath");
+                System.out.println("[" + getKey() + "] Resource is file in the classpath");
             } else if (resource.getURI().isPlatform()) {
-                System.out.println("[" + getKey() +"] Resource is platform");
+                System.out.println("[" + getKey() + "] Resource is platform");
             } else if (resource.getURI().isPlatformPlugin()) {
-                System.out.println("[" + getKey() +"] Resource is platform plugin");
+                System.out.println("[" + getKey() + "] Resource is platform plugin");
             } else if (resource.getURI().isPlatformResource()) {
-                System.out.println("[" + getKey() +"] Resource is platform resource");
+                System.out.println("[" + getKey() + "] Resource is platform resource");
             } else {
-                System.out.println("[" + getKey() +" ]Resource is file in the JAR");
+                System.out.println("[" + getKey() + " ]Resource is file in the JAR");
             }
             System.out.print(" [" + resource.getURI().toFileString() + "]");
             System.out.println();
 
-            if (getEObject() instanceof ENamedElement)
-            {
+            if (getEObject() instanceof ENamedElement) {
                 EcoreTranslator modelTranslator;
                 try {
                     modelTranslator = new EcoreTranslator(repository);
-                    recore= modelTranslator.translate(getPath());
+                    recore = modelTranslator.translate(getPath());
                 } catch (IOException | NullPointerException e) {
                     e.printStackTrace();
                     return;
                 }
                 ANTLRInputStream input = new ANTLRInputStream(recore.toCharArray(), recore.length());
                 Repository.importPackage(input, this);
-            }else{
+            } else {
                 EcoreInstanceTranslator instanceTranslator;
                 try {
                     instanceTranslator = new EcoreInstanceTranslator(repository);
-                    recore= instanceTranslator.translate(getPath());
+                    recore = instanceTranslator.translate(getPath());
                 } catch (IOException | NullPointerException e) {
                     e.printStackTrace();
                     return;
@@ -100,23 +100,22 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
     }
 
     @Override
-    public List<IName> getNames() {
-        return null;
-    }
-
-    @Override
-    public String getKey(){
+    public String getKey() {
         return getContext().name != null ? getContext().name.getText()
                 : getRootObject() instanceof ENamedElement
                 ? ((ENamedElement) getRootObject()).getName() : null;
     }
 
-    protected String getName(){
+    @Override
+    public String getSegment() {
+        return this.getContext().name != null ? this.getContext().name.getText() : INamespace.super.getSegment();
+    }
+
+    protected String getName() {
         String name = "";
         if (this.getContext().name != null) {
             name = "::" + this.getContext().name.getText();
-        }
-        else if (this.getEObject() != null && this.getEObject() instanceof ENamedElement) {
+        } else if (this.getEObject() != null && this.getEObject() instanceof ENamedElement) {
             ENamedElement pack = (ENamedElement) this.getEObject();
             if (pack.getName() != null && !pack.getName().isEmpty())
                 name = "::" + pack.getName();
@@ -148,7 +147,7 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
         } else {
             stop = getContext().stop.getStopIndex();
         }
-        return  Element.getNormalizedText(getContext(), start, stop);
+        return Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override

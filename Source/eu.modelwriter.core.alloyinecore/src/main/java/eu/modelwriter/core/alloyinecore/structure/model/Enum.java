@@ -26,12 +26,13 @@ package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EEnum;
 
-public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisibility {
+public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisibility, ITarget {
     public Enum(EClassifier eClassifier, EEnumContext context) {
         super(eClassifier, context);
     }
@@ -43,7 +44,9 @@ public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisi
             String text = getContext().visibility.getText();
             try {
                 visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+            } catch (IllegalArgumentException e) {
+                visibility = Visibility.PACKAGE;
+            }
         }
         return visibility;
     }
@@ -54,6 +57,11 @@ public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisi
             return getContext().name.start;
         else
             return super.getToken();
+    }
+
+    @Override
+    public String getSegment() {
+        return this.getContext().name != null ? this.getContext().name.getText() : ITarget.super.getSegment();
     }
 
     @Override
@@ -68,14 +76,14 @@ public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisi
             stop = getContext().stop.getStopIndex();
         }
 
-        if (getContext().templateSignature != null){
+        if (getContext().templateSignature != null) {
             stop = getContext().templateSignature.stop.getStopIndex();
         }
-        return  Element.getNormalizedText(getContext(), start, stop);
+        return Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override
-    protected String getName(){
+    protected String getName() {
         if (this.getContext().name != null)
             return ":" + this.getContext().name.getText();
         else

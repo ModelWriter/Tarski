@@ -25,13 +25,15 @@
 package eu.modelwriter.core.alloyinecore.structure.imports;
 
 import eu.modelwriter.core.alloyinecore.recognizer.imports.ImportsParser.IPackageContext;
-import eu.modelwriter.core.alloyinecore.structure.model.IVisibility;
-import eu.modelwriter.core.alloyinecore.structure.model.Visibility;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.ISegment;
+import eu.modelwriter.core.alloyinecore.structure.model.IVisibility;
+import eu.modelwriter.core.alloyinecore.structure.model.Import;
+import eu.modelwriter.core.alloyinecore.structure.model.Visibility;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 
-public final class ImportedPackage extends Element<IPackageContext> implements IVisibility {
+public final class ImportedPackage extends Element<IPackageContext> implements IVisibility, ISegment {
 
     public ImportedPackage(IPackageContext context) {
         super(context);
@@ -49,14 +51,14 @@ public final class ImportedPackage extends Element<IPackageContext> implements I
     public String getLabel() {
         String name;
         String nsURI;
-        if (getContext().name != null){
+        if (getContext().name != null) {
             name = getContext().name.getText();
         } else {
             name = "Package";
         }
-        if (getContext().nsURI != null){
+        if (getContext().nsURI != null) {
             nsURI = getContext().nsURI.getText();
-        }else {
+        } else {
             nsURI = "";
         }
         return name + " : " + nsURI;
@@ -69,16 +71,18 @@ public final class ImportedPackage extends Element<IPackageContext> implements I
             String text = getContext().visibility().getText();
             try {
                 visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+            } catch (IllegalArgumentException e) {
+                visibility = Visibility.PACKAGE;
+            }
         }
         return visibility;
     }
 
-    protected String getName(){
-        if (this.getContext().name != null)
-            return "::" + this.getContext().name.getText();
-        else
-            return super.getName();
+    @Override
+    public String getSegment() {
+        if (getOwner() != null && getOwner() instanceof Import)
+            return "";
+        return getContext().name != null ? getContext().name.getText() : ISegment.super.getSegment();
     }
 
     @Override

@@ -26,13 +26,25 @@ package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.ISegment;
+import eu.modelwriter.core.alloyinecore.structure.base.ISource;
+import eu.modelwriter.core.alloyinecore.structure.base.ITarget;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedClass;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.ETypeParameter;
 
-public class TypeParameter extends NamedElement<ETypeParameter, ETypeParameterContext> {
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class TypeParameter extends NamedElement<ETypeParameter, ETypeParameterContext> implements ITarget, ISource {
     public TypeParameter(ETypeParameter eTypeParameter, ETypeParameterContext context) {
         super(eTypeParameter, context);
+    }
+
+    @Override
+    public String getSegment() {
+        return getContext().start != null ? getContext().start.getText() : ITarget.super.getSegment();
     }
 
     @Override
@@ -48,9 +60,9 @@ public class TypeParameter extends NamedElement<ETypeParameter, ETypeParameterCo
         return Element.getNormalizedText(getContext());
     }
 
-    protected String getName(){
+    protected String getName() {
         if (this.getContext().name != null)
-            return "<" + this.getContext().name.getText() + ">" ;
+            return "<" + this.getContext().name.getText() + ">";
         else
             return super.getName();
     }
@@ -58,5 +70,13 @@ public class TypeParameter extends NamedElement<ETypeParameter, ETypeParameterCo
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitTypeParameter(this);
+    }
+
+    @Override
+    public List<ISegment> getTargets() {
+        return ISource.super.getTargets().stream()
+                .filter(e -> e instanceof Classifier ||
+                        e instanceof ImportedClass)
+                .collect(Collectors.toList());
     }
 }

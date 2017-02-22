@@ -25,11 +25,8 @@
 package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
-import eu.modelwriter.core.alloyinecore.structure.base.IName;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.eclipse.emf.ecore.EPackage;
-
-import java.util.List;
 
 public final class RootPackage extends Package {
 
@@ -38,12 +35,12 @@ public final class RootPackage extends Package {
     }
 
     @Override
-    public List<IName> getNames() {
-        return null;
+    public String getSegment() {
+        return "";
     }
 
     @Override
-    public String getKey(){
+    public String getKey() {
         return getContext().name != null ? getContext().name.getText() : "Root";
     }
 

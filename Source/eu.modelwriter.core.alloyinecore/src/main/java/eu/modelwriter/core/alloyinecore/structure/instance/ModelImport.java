@@ -25,8 +25,10 @@
 package eu.modelwriter.core.alloyinecore.structure.instance;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModelImportContext;
-import eu.modelwriter.core.alloyinecore.structure.base.*;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.INamespace;
 import eu.modelwriter.core.alloyinecore.structure.base.Object;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
 import eu.modelwriter.core.alloyinecore.translator.EcoreTranslator;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -35,7 +37,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import java.io.IOException;
-import java.util.List;
 
 public final class ModelImport extends Object<EObject, ModelImportContext> implements INamespace {
 
@@ -67,11 +68,6 @@ public final class ModelImport extends Object<EObject, ModelImportContext> imple
 
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
-        return null;
-    }
-
-    @Override
-    public List<IName> getNames() {
         return null;
     }
 
