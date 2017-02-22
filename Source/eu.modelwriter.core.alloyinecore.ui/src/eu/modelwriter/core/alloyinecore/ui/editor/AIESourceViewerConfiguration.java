@@ -130,9 +130,8 @@ public class AIESourceViewerConfiguration extends TextSourceViewerConfiguration 
   }
 
   /*
-   * @see
-   * org.eclipse.jface.text.source.SourceViewerConfiguration#getConfiguredDocumentPartitioning(org.
-   * eclipse.jface.text.source.ISourceViewer)
+   * @see org.eclipse.jface.text.source.SourceViewerConfiguration#
+   * getConfiguredDocumentPartitioning(org. eclipse.jface.text.source.ISourceViewer)
    */
   @Override
   public String getConfiguredDocumentPartitioning(final ISourceViewer sourceViewer) {
@@ -143,9 +142,8 @@ public class AIESourceViewerConfiguration extends TextSourceViewerConfiguration 
   }
 
   /*
-   * @see
-   * org.eclipse.jface.text.source.SourceViewerConfiguration#getHyperlinkDetectorTargets(org.eclipse
-   * .jface.text.source.ISourceViewer)
+   * @see org.eclipse.jface.text.source.SourceViewerConfiguration#
+   * getHyperlinkDetectorTargets(org.eclipse .jface.text.source.ISourceViewer)
    */
   @Override
   protected Map<String, IAdaptable> getHyperlinkDetectorTargets(final ISourceViewer sourceViewer) {
@@ -159,7 +157,9 @@ public class AIESourceViewerConfiguration extends TextSourceViewerConfiguration 
     return new DefaultTextHover(sourceViewer) {
       @Override
       protected boolean isIncluded(final Annotation annotation) {
-        return AIEEditor.PARSER_ERROR_ANNOTATION_TYPE.equals(annotation.getType());
+        return AIEEditor.PARSER_ERROR_ANNOTATION.equals(annotation.getType())
+            || AIEEditor.TYPE_ERROR_ANNOTATION.equals(annotation.getType())
+            || AIEEditor.TYPE_WARNING_ANNOTATION.equals(annotation.getType());
       }
     };
   }
@@ -196,9 +196,8 @@ public class AIESourceViewerConfiguration extends TextSourceViewerConfiguration 
   }
 
   /*
-   * @see /
-   * org.eclipse.jface.text.source.SourceViewerConfiguration#getAutoEditStrategies(org.eclipse.
-   * jface.text.source.ISourceViewer, / java.lang.String)
+   * @see / org.eclipse.jface.text.source.SourceViewerConfiguration#
+   * getAutoEditStrategies(org.eclipse. jface.text.source.ISourceViewer, / java.lang.String)
    */
   @Override
   public IAutoEditStrategy[] getAutoEditStrategies(final ISourceViewer sourceViewer,

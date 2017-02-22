@@ -20,24 +20,37 @@ public class Activator extends AbstractUIPlugin {
   // The shared instance
   private static Activator plugin;
 
+  private ASTManager modelManager;
+  private ASTManager instanceManager;
+
   public Activator() {}
 
   /*
    * (non-Javadoc)
    * 
-   * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+   * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework. BundleContext)
    */
   @Override
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
+    modelManager = new ASTModelManager();
+    instanceManager = new ASTInstanceManager();
     getImageRegistry();
+  }
+
+  public ASTManager getModelManager() {
+    return modelManager;
+  }
+
+  public ASTManager getInstanceManager() {
+    return instanceManager;
   }
 
   /*
    * (non-Javadoc)
    * 
-   * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+   * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework. BundleContext)
    */
   @Override
   public void stop(BundleContext context) throws Exception {
@@ -75,7 +88,8 @@ public class Activator extends AbstractUIPlugin {
       String path = files.nextElement();
       URL entry = plugin.getBundle().getEntry(path);
       ImageDescriptor desc = ImageDescriptor.createFromURL(entry);
-      reg.put(new File(path).getName().replace(".gif", "").replace(".svg", "").replace(".png", ""), desc);
+      reg.put(new File(path).getName().replace(".gif", "").replace(".svg", "").replace(".png", ""),
+          desc);
     }
   }
 }

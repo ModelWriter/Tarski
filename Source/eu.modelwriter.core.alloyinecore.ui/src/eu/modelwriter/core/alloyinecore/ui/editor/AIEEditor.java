@@ -16,7 +16,6 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
-import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -26,8 +25,10 @@ import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModelContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.ui.ASTChangeListener;
+import eu.modelwriter.core.alloyinecore.ui.ASTManager;
+import eu.modelwriter.core.alloyinecore.ui.Activator;
 import eu.modelwriter.core.alloyinecore.ui.editor.color.AIEColorManager;
 import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocument;
 import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocumentProvider;
@@ -35,18 +36,24 @@ import eu.modelwriter.core.alloyinecore.ui.editor.outline.AIEContentOutlinePage;
 import eu.modelwriter.core.alloyinecore.ui.editor.partition.IAIEPartitions;
 import eu.modelwriter.core.alloyinecore.ui.editor.util.EditorUtils;
 
-public class AIEEditor extends TextEditor {
+public class AIEEditor extends TextEditor implements ASTChangeListener {
 
   public static final String editorID =
       "eu.modelwriter.core.alloyinecore.ui.editors.AlloyInEcoreEditor";
-  public static final String PARSER_ERROR_ANNOTATION_TYPE =
+
+  public static final String PARSER_ERROR_ANNOTATION =
       "eu.modelwriter.core.alloyinecore.ui.editor.parsererror";
-  public static final String PARSER_ERROR_MARKER_TYPE =
+  public static final String TYPE_ERROR_ANNOTATION =
+      "eu.modelwriter.core.alloyinecore.ui.editor.typererror";
+  public static final String TYPE_WARNING_ANNOTATION =
+      "eu.modelwriter.core.alloyinecore.ui.editor.typewarning";
+  public static final String PARSER_ERROR_MARKER =
       "eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker";
 
+  @SuppressWarnings("rawtypes")
+  protected Element rootElement;
   protected AIEColorManager aIEColorManager;
   private AIEContentOutlinePage outlinePage;
-  private Element<ModelContext> parsedModule;
   private ProjectionAnnotationModel annotationModel;
   private Annotation[] oldAnnotations;
   protected HashMap<ProjectionAnnotation, Position> projectionAnnotations =
@@ -57,13 +64,19 @@ public class AIEEditor extends TextEditor {
 
   public AIEEditor() {
     aIEColorManager = new AIEColorManager();
+    getManagerForEditor().addChangeListener(this);
+    initEditor();
+  }
+
+  protected void initEditor() {
     setSourceViewerConfiguration(
         new AIESourceViewerConfiguration(aIEColorManager, this, IAIEPartitions.AIE_PARTITIONING));
     setDocumentProvider(new AIEDocumentProvider());
   }
 
-  public Element<ModelContext> getParsedModule() {
-    return parsedModule;
+  @SuppressWarnings("rawtypes")
+  public Element getRootElement() {
+    return rootElement;
   }
 
   @Override
@@ -81,12 +94,12 @@ public class AIEEditor extends TextEditor {
     super.createPartControl(parent);
     final ProjectionViewer projectionViewer = (ProjectionViewer) getSourceViewer();
 
-    final ProjectionSupport projectionSupport =
-        new ProjectionSupport(projectionViewer, getAnnotationAccess(), getSharedColors());
-    projectionSupport.install();
+    // final ProjectionSupport projectionSupport =
+    // new ProjectionSupport(projectionViewer, getAnnotationAccess(), getSharedColors());
+    // projectionSupport.install();
 
     // turn projection mode on
-    projectionViewer.doOperation(ProjectionViewer.TOGGLE);
+    // projectionViewer.doOperation(ProjectionViewer.TOGGLE);
 
     annotationModel = projectionViewer.getProjectionAnnotationModel();
   }
@@ -94,8 +107,8 @@ public class AIEEditor extends TextEditor {
   @Override
   protected void handleCursorPositionChanged() {
     super.handleCursorPositionChanged();
-    final String[] cursorPosition = getCursorPosition().split(" : ");
     try {
+      final String[] cursorPosition = getCursorPosition().split(" : ");
       final int line = Integer.parseInt(cursorPosition[0]) - 1;
       final int column = Integer.parseInt(cursorPosition[1]) - 1;
       final int offset =
@@ -103,56 +116,56 @@ public class AIEEditor extends TextEditor {
       if (outlinePage != null && offset != outlinePage.getSelectionOffset()) {
         outlinePage.selectElement(findElement(line + 1, offset));
       }
-    } catch (final NumberFormatException e) {
+    } catch (final NumberFormatException | ArrayIndexOutOfBoundsException e) {
       e.printStackTrace();
     } catch (final BadLocationException e) {
       e.printStackTrace();
     }
   }
 
-//  @SuppressWarnings({"rawtypes", "unchecked"})
-//  protected void calculateFoldingPositions(final Element element) {
-//    List<Element> ownedElements = element.getOwnedElements();
-//    for (Element ownedElement : ownedElements) {
-//      Position position = getFoldablePosition(ownedElement);
-//      if (position != null) {
-//        ProjectionAnnotation prevAnno = element2anno.get(ownedElement);
-//        ProjectionAnnotation annotation = new ProjectionAnnotation();
-//        if (prevAnno != null && prevAnno.isCollapsed()) {
-//          annotation.markCollapsed();
-//        }
-//        projectionAnnotations.put(annotation, position);
-//        element2anno.put(ownedElement, annotation);
-//      }
-//      calculateFoldingPositions(ownedElement);
-//    }
-//  }
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  protected void calculateFoldingPositions(final Element element) {
+    List<Element> ownedElements = element.getOwnedElements();
+    for (Element ownedElement : ownedElements) {
+      Position position = getFoldablePosition(ownedElement);
+      if (position != null) {
+        ProjectionAnnotation prevAnno = element2anno.get(ownedElement);
+        ProjectionAnnotation annotation = new ProjectionAnnotation();
+        if (prevAnno != null && prevAnno.isCollapsed()) {
+          annotation.markCollapsed();
+        }
+        projectionAnnotations.put(annotation, position);
+        element2anno.put(ownedElement, annotation);
+      }
+      calculateFoldingPositions(ownedElement);
+    }
+  }
 
-//  @SuppressWarnings("rawtypes")
-//  private Position getFoldablePosition(final Element element) {
-//    int startIndex = element.getContext().getStart().getStartIndex();
-//    // find last token
-//    CommonToken lastToken = null;
-//    for (int i = element.getContext().getChildCount() - 1; i >= 0; i--) {
-//      if (element.getContext().getChild(i).getPayload() instanceof CommonToken) {
-//        lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
-//        break;
-//      }
-//    }
-//    try {
-//      if (lastToken != null && lastToken.getLine() != element.getLine()) {
-//        IDocument document = getDocumentProvider().getDocument(getEditorInput());
-//        int stopLine = document.getLineOfOffset(lastToken.getStopIndex());
-//        int lineSize = document.getNumberOfLines() - 1;
-//        int lenght = document.getLineOffset(lineSize > (stopLine + 1) ? (stopLine + 1) : stopLine)
-//            - startIndex;
-//        return new Position(startIndex, lenght);
-//      }
-//    } catch (BadLocationException e) {
-//      e.printStackTrace();
-//    }
-//    return null;
-//  }
+  @SuppressWarnings("rawtypes")
+  private Position getFoldablePosition(final Element element) {
+    int startIndex = element.getContext().getStart().getStartIndex();
+    // find last token
+    CommonToken lastToken = null;
+    for (int i = element.getContext().getChildCount() - 1; i >= 0; i--) {
+      if (element.getContext().getChild(i).getPayload() instanceof CommonToken) {
+        lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
+        break;
+      }
+    }
+    try {
+      if (lastToken != null && lastToken.getLine() != element.getLine()) {
+        IDocument document = getDocumentProvider().getDocument(getEditorInput());
+        int stopLine = document.getLineOfOffset(lastToken.getStopIndex());
+        int lineSize = document.getNumberOfLines() - 1;
+        int lenght = document.getLineOffset(lineSize > (stopLine + 1) ? (stopLine + 1) : stopLine)
+            - startIndex;
+        return new Position(startIndex, lenght);
+      }
+    } catch (BadLocationException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
   public void updateFoldingStructure() {
     final Annotation[] annotations = projectionAnnotations.keySet().toArray(new Annotation[0]);
@@ -171,9 +184,9 @@ public class AIEEditor extends TextEditor {
   public <T> T getAdapter(final Class<T> adapter) {
     if (IContentOutlinePage.class.equals(adapter)) {
       if (outlinePage == null) {
-        outlinePage = new AIEContentOutlinePage(getDocumentProvider(), this);
-        if (parsedModule != null) {
-          outlinePage.refresh(parsedModule);
+        outlinePage = new AIEContentOutlinePage(getDocumentProvider(), this, getManagerForEditor());
+        if (rootElement != null) {
+          outlinePage.refresh(rootElement);
         }
       }
       return (T) outlinePage;
@@ -181,28 +194,13 @@ public class AIEEditor extends TextEditor {
     return super.getAdapter(adapter);
   }
 
-  public void setModule(final Element<ModelContext> module, final boolean refreshOutline) {
-    parsedModule = module;
-    Display.getDefault().asyncExec(new Runnable() {
-
-      @Override
-      public void run() {
-        // Update folding positions
-        projectionAnnotations.clear();
-//        calculateFoldingPositions(parsedModule);
-//        updateFoldingStructure();
-        // Refresh the outline
-        if (outlinePage != null && refreshOutline) {
-          outlinePage.refresh(parsedModule);
-        }
-        handleCursorPositionChanged();
-      }
-    });
+  protected ASTManager getManagerForEditor() {
+    return Activator.getDefault().getModelManager();
   }
 
   @SuppressWarnings({"rawtypes"})
   public Element findElement(final int line, final int offset) {
-    return EditorUtils.findElement(parsedModule, line, offset);
+    return EditorUtils.findElement(rootElement, line, offset);
   }
 
   public EcoreEditor openEcoreEditor() {
@@ -230,5 +228,19 @@ public class AIEEditor extends TextEditor {
       arrayList.add(realEObject);
       ecoreEditor.setSelectionToViewer(arrayList);
     }
+  }
+
+  @SuppressWarnings("rawtypes")
+  @Override
+  public void onASTChange(Element model) {
+    this.rootElement = model;
+    Display.getDefault().asyncExec(new Runnable() {
+
+      @Override
+      public void run() {
+        // Update folding positions
+        projectionAnnotations.clear();
+      }
+    });
   }
 }

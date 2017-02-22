@@ -31,7 +31,7 @@ public class AIEHyperlinkDetector implements IHyperlinkDetector {
 
   private void loadLinks() {
     TypeVisitor typeVisitor = new TypeVisitor(editor);
-    typeVisitor.visit(editor.getParsedModule());
+    typeVisitor.visit(editor.getRootElement());
     hyperlinks = typeVisitor.getLinks();
   }
 

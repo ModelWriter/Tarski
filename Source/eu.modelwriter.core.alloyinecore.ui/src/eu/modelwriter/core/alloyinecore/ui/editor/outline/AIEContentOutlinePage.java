@@ -10,6 +10,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -17,8 +18,10 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.model.Multiplicity;
+import eu.modelwriter.core.alloyinecore.ui.ASTChangeListener;
+import eu.modelwriter.core.alloyinecore.ui.ASTManager;
 
-public class AIEContentOutlinePage extends ContentOutlinePage {
+public class AIEContentOutlinePage extends ContentOutlinePage implements ASTChangeListener {
 
   private final TextEditor aieEditor;
   private TreeViewer viewer;
@@ -27,13 +30,14 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
   private final RootWrapper root = new RootWrapper();
 
   public AIEContentOutlinePage(final IDocumentProvider documentProvider,
-      final TextEditor alloyInEcoreEditor) {
+      final TextEditor alloyInEcoreEditor, ASTManager manager) {
     aieEditor = alloyInEcoreEditor;
+    manager.addChangeListener(this);
   }
 
   @SuppressWarnings("rawtypes")
   public void refresh(final Element parsedModule) {
-    root.setModule(parsedModule);
+    root.setElement(parsedModule);
     if (viewer != null) {
       viewer.refresh(true);
     }
@@ -91,8 +95,23 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     public RootWrapper() {}
 
     @SuppressWarnings("rawtypes")
-    public void setModule(final Element root) {
+    public void setElement(final Element root) {
       this.root = root;
     }
+  }
+
+  @SuppressWarnings("rawtypes")
+  @Override
+  public void onASTChange(Element model) {
+    root.setElement(model);
+    Display.getDefault().asyncExec(new Runnable() {
+
+      @Override
+      public void run() {
+        if (viewer != null) {
+          viewer.refresh(true);
+        }
+      }
+    });
   }
 }

@@ -1,10 +1,9 @@
 package eu.modelwriter.core.alloyinecore.ui.editor.reconciling;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -24,24 +23,32 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.ui.ASTErrorListener;
+import eu.modelwriter.core.alloyinecore.ui.Activator;
 import eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor;
-import eu.modelwriter.core.alloyinecore.ui.editor.util.EditorUtils;
 
 public class AIESyntacticReconcilingStrategy
-    implements IReconcilingStrategy, IReconcilingStrategyExtension {
+    implements IReconcilingStrategy, IReconcilingStrategyExtension, ASTErrorListener {
 
+  private List<Annotation> annotations = new ArrayList<>();
   protected final ISourceViewer sourceViewer;
   protected final ITextEditor editor;
   protected IDocument document;
   protected final IFile iFile;
   protected boolean noErrors;
 
+
   public AIESyntacticReconcilingStrategy(final ISourceViewer sourceViewer,
       final ITextEditor editor) {
     this.sourceViewer = sourceViewer;
     this.editor = editor;
     iFile = editor.getEditorInput().getAdapter(IFile.class);
+    attachErrorListener();
+  }
+
+  protected void attachErrorListener() {
+    Activator.getDefault().getModelManager().addErrorListener(this);
   }
 
   protected IAnnotationModel getAnnotationModel() {
@@ -64,18 +71,20 @@ public class AIESyntacticReconcilingStrategy
     this.document = document;
   }
 
-  protected void createErrorAnnotation(final Token offendingToken, final String msg) {
-    final Annotation annotation = new Annotation(AIEEditor.PARSER_ERROR_ANNOTATION_TYPE, true, msg);
+  protected void createAnnotation(final Token offendingToken, final String msg,
+      final String annotationType) {
+    final Annotation annotation = new Annotation(annotationType, true, msg);
     getAnnotationModel().connect(document);
     getAnnotationModel().addAnnotation(annotation, new Position(offendingToken.getStartIndex(),
         offendingToken.getStopIndex() - offendingToken.getStartIndex() + 1));
     getAnnotationModel().disconnect(document);
+    annotations.add(annotation);
   }
 
   @SuppressWarnings("unused")
   private void createErrorMarker(final Token offendingToken, final String message) {
     try {
-      final IMarker m = iFile.createMarker(AIEEditor.PARSER_ERROR_MARKER_TYPE);
+      final IMarker m = iFile.createMarker(AIEEditor.PARSER_ERROR_MARKER);
       m.setAttribute(IMarker.MESSAGE, message);
       m.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
       m.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
@@ -99,20 +108,9 @@ public class AIESyntacticReconcilingStrategy
   @Override
   public void reconcile(final IRegion partition) {
     try {
-      noErrors = true;
-      removeOldAnnotations();
       URI uri = URI.createPlatformResourceURI(iFile.getFullPath().toString(), true);
-      final Model parsedModule = EditorUtils.parseDocument(document, uri, new BaseErrorListener() {
-        @Override
-        public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol,
-            final int line, final int charPositionInLine, final String msg,
-            final RecognitionException e) {
-          noErrors = false;
-          createErrorAnnotation((Token) offendingSymbol, msg);
-        }
-      });
-      // Set module and refresh outline
-      ((AIEEditor) editor).setModule(parsedModule, true);
+      removeOldAnnotations();
+      Activator.getDefault().getModelManager().parseDocument(document, uri);
     } catch (final Exception e1) {
       e1.printStackTrace();
     }
@@ -121,25 +119,35 @@ public class AIESyntacticReconcilingStrategy
   protected void removeOldAnnotations() {
     final IAnnotationModel annotationModel = getAnnotationModel();
     annotationModel.connect(document);
-
-    final Iterator<Annotation> iter = annotationModel.getAnnotationIterator();
-    Annotation beRemoved = null;
-    while (iter.hasNext()) {
-      beRemoved = iter.next();
-      if (!beRemoved.getType().equals(AIEEditor.PARSER_ERROR_ANNOTATION_TYPE)) {
-        continue;
-      }
-      annotationModel.removeAnnotation(beRemoved);
-    }
+    annotations.forEach(anno -> annotationModel.removeAnnotation(anno));
     annotationModel.disconnect(document);
+    annotations.clear();
   }
 
   @SuppressWarnings("unused")
   private void removeOldMarkers() {
     try {
-      iFile.deleteMarkers(AIEEditor.PARSER_ERROR_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+      iFile.deleteMarkers(AIEEditor.PARSER_ERROR_MARKER, true, IResource.DEPTH_INFINITE);
     } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
+
+  @Override
+  public void onSyntaxError(Token offendingSymbol, String msg) {
+    createAnnotation((Token) offendingSymbol, msg, AIEEditor.PARSER_ERROR_ANNOTATION);
+  }
+
+  @Override
+  public void onTypeError(String message, Set<Token> relatedElements) {
+    relatedElements
+        .forEach(e -> createAnnotation(e, message, AIEEditor.TYPE_ERROR_ANNOTATION));
+  }
+
+  @Override
+  public void onTypeWarning(String message, Set<Token> relatedElements) {
+    relatedElements
+        .forEach(e -> createAnnotation(e, message, AIEEditor.TYPE_WARNING_ANNOTATION));
+  }
+
 }

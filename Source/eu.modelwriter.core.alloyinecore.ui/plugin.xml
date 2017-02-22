@@ -41,6 +41,42 @@
             verticalRulerPreferenceKey="aie.annotation.verticalRuler"
             verticalRulerPreferenceValue="true">
       </specification>
+      <specification
+            annotationType="eu.modelwriter.core.alloyinecore.ui.editor.typererror"
+            colorPreferenceKey="aie.annotation.te.colorPreference"
+            colorPreferenceValue="255,0,0"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="AIE Type Error Annotation"
+            overviewRulerPreferenceKey="aie.annotation.te.overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="2"
+            symbolicIcon="error"
+            textPreferenceKey="aie.annotation.te.textPreference"
+            textPreferenceValue="true"
+            textStylePreferenceKey="aie.annotation.textStyle"
+            textStylePreferenceValue="SQUIGGLES"
+            verticalRulerPreferenceKey="aie.annotation.te.verticalRuler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+      <specification
+            annotationType="eu.modelwriter.core.alloyinecore.ui.editor.typewarning"
+            colorPreferenceKey="aie.annotation.tw.colorPreference"
+            colorPreferenceValue="255,255,0"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="AIE Type Warning Annotation"
+            overviewRulerPreferenceKey="aie.annotation.tw.overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="2"
+            symbolicIcon="warning"
+            textPreferenceKey="aie.annotation.tw.textPreference"
+            textPreferenceValue="true"
+            textStylePreferenceKey="aie.annotation.textStyle"
+            textStylePreferenceValue="SQUIGGLES"
+            verticalRulerPreferenceKey="aie.annotation.tw.verticalRuler"
+            verticalRulerPreferenceValue="true">
+      </specification>
    </extension>
    <extension
          point="org.eclipse.ui.editors.annotationTypes">
@@ -48,6 +84,16 @@
             markerSeverity="1"
             markerType="eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker"
             name="eu.modelwriter.core.alloyinecore.ui.editor.parsererror"
+            super="org.eclipse.ui.workbench.texteditor.error">
+      </type>
+      <type
+            markerSeverity="0"
+            name="eu.modelwriter.core.alloyinecore.ui.editor.typewarning"
+            super="org.eclipse.ui.workbench.texteditor.warning">
+      </type>
+      <type
+            markerSeverity="1"
+            name="eu.modelwriter.core.alloyinecore.ui.editor.typererror"
             super="org.eclipse.ui.workbench.texteditor.error">
       </type>
    </extension>
