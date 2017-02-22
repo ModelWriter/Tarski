@@ -1,13 +1,13 @@
 package eu.modelwriter.core.alloyinecore.typechecking;
 
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import org.antlr.v4.runtime.Token;
 
 import javax.tools.Diagnostic;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Trace {
-    private Set<Element<?>> tokens;
+    private Set<Token> tokens;
     private String fileName;
     private int lineNumber, startOffset, endOffset;
 
@@ -19,11 +19,11 @@ public class Trace {
         tokens = new HashSet<>();
     }
 
-    public void addToken(Element<?> token) {
+    public void addToken(Token token) {
         tokens.add(token);
     }
 
-    public Set<Element<?>> getTokens() {
+    public Set<Token> getTokens() {
         return tokens;
     }
 

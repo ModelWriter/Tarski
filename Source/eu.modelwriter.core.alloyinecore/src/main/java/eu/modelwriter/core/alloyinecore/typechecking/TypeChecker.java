@@ -1,11 +1,11 @@
 package eu.modelwriter.core.alloyinecore.typechecking;
 
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.model.Class;
 import eu.modelwriter.core.alloyinecore.structure.model.Interface;
 import eu.modelwriter.core.alloyinecore.structure.model.Model;
 import eu.modelwriter.core.alloyinecore.structure.model.Package;
 import eu.modelwriter.core.alloyinecore.visitor.BaseVisitorImpl;
+import org.antlr.v4.runtime.Token;
 
 import javax.tools.*;
 import java.io.File;
@@ -51,7 +51,7 @@ public class TypeChecker {
         List<String> options = Arrays.asList("-d", outDir); // -d: output dir
         compiler.getTask(null, fileManager, diagnostics, options, null, generatedJavaFiles).call();
         for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-            Set<Element<?>> elements = generator.findTokens(diagnostic);
+            Set<Token> elements = generator.findTokens(diagnostic);
             for (TypeErrorListener listener : errorListeners) {
                 String message = diagnostic.getMessage(Locale.getDefault());
                 message += System.getProperty("line.separator") + "(" + diagnostic.getCode() + ")";

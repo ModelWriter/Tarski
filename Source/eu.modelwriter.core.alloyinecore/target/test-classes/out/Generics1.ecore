@@ -85,7 +85,7 @@
       <eParameters name="y" lowerBound="1"/>
     </eOperations>
     <eOperations name="create" lowerBound="1">
-      <eTypeParameters name="V">
+      <eTypeParameters name="K">
         <eBounds/>
       </eTypeParameters>
       <eParameters name="name" lowerBound="1"/>

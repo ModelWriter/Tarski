@@ -1,12 +1,12 @@
 package eu.modelwriter.core.alloyinecore.typechecking;
 
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import org.antlr.v4.runtime.Token;
 
 import java.util.Set;
 
 public interface TypeErrorListener {
 
-    void onTypeError(String message, Set<Element<?>> relatedElements);
+    void onTypeError(String message, Set<Token> relatedElements);
 
-    void onTypeWarning(String message, Set<Element<?>> relatedElements);
+    void onTypeWarning(String message, Set<Token> relatedElements);
 }
