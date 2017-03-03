@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/modelwriter/wp3.png?label=ready&title=Ready)](https://waffle.io/modelwriter/wp3)
 Work Package 3 (Tarski Platform)
 ===
 1. Introduction
