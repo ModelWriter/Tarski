@@ -1,4 +1,7 @@
-[![Stories in Ready](https://badge.waffle.io/modelwriter/wp3.png?label=ready&title=Ready)](https://waffle.io/modelwriter/wp3)
+[![Stories in Implementation](https://badge.waffle.io/modelwriter/wp3.png?label=in%20progress&title=Implementation)](https://waffle.io/modelwriter/wp3)
+[![Stories in Research](https://badge.waffle.io/modelwriter/wp3.png?label=Research&title=Research)](https://waffle.io/modelwriter/wp3)
+[![Stories in State-of-the-Art](https://badge.waffle.io/modelwriter/wp3.png?label=SotA&title=State-of-the-Art)](https://waffle.io/modelwriter/wp3)
+
 Work Package 3 (Tarski Platform)
 ===
 1. Introduction
