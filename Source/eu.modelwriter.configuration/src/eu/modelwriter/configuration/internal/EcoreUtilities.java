@@ -156,6 +156,27 @@ public class EcoreUtilities {
 
   /**
    *
+   * @param @EObject object to be set
+   * @param name structural feature name
+   * @param newVal new value
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static void eSetStructuralFeatureByName(final EObject eObject, final String name,
+      final Object newVal) {
+    for (final EStructuralFeature eStructuralFeature : eObject.eClass().getEAllStructuralFeatures()) {
+      if (eStructuralFeature.getName().equals(name)) {
+        if (eStructuralFeature.isMany()) {
+          ((List) eObject.eGet(eStructuralFeature)).add(newVal);
+        } else {
+          eObject.eSet(eStructuralFeature, newVal);
+        }
+        break;
+      }
+    }
+  }
+
+  /**
+   *
    * @param root @EObject
    * @param className class name to be find
    * @return
