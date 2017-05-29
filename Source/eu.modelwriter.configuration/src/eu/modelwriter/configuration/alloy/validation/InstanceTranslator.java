@@ -128,6 +128,7 @@ public class InstanceTranslator {
         Pattern.compile("(-)(-)(\\s*)(Reason|reason)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
             Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
+    int bracketsCount = 0;
     boolean isRemoveFact = false;
     for (final String line : lines) {
       final Matcher matcher = p.matcher(line);
@@ -135,8 +136,12 @@ public class InstanceTranslator {
         isRemoveFact = true;
       } else if (!isRemoveFact) {
         newContent += line + "\n";
-      } else if (line.contains("}")) {
-        isRemoveFact = false;
+      } else if (isRemoveFact) {
+          bracketsCount += line.length() - line.replace("{", "").length();
+          bracketsCount -= line.length() - line.replace("}", "").length();
+          if (bracketsCount==0) {
+            isRemoveFact = false;
+          }
       }
     }
 
