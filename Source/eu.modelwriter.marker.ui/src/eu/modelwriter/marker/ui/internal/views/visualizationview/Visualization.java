@@ -352,7 +352,7 @@ public class Visualization extends ViewPart {
       Visualization.myState = new VizState(instance);
 
       // FE
-      Visualization.myState.mergeArrows.put(null, false);
+      //Visualization.myState.mergeArrows.put(null, false);
 
       if (Visualization.graphPanel != null) {
         lastLocation = Visualization.graphPanel.getLocation();
