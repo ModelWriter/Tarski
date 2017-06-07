@@ -693,7 +693,7 @@
     </menuContribution>
     <menuContribution
           allPopups="false"
-          locationURI="menu:org.eclipse.ui.main.menu">
+          locationURI="menu:org.eclipse.ui.main.menu?before=project">
        <menu
              id="eu.modelwriter.marker.main.menu"
              label="Tarski">
