@@ -13,7 +13,7 @@ public class LocateCompletionProcessor extends MetaModelCompletionProcessor {
 
   private final char[] activationChars = new char[] {'@'};
 
-  private final String[] completionWords = new String[] {"ReqIF", "EMF", "Text", "Java"};
+  private final String[] completionWords = new String[] {"ReqIF", "EMF", "Text", "Code" };
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
