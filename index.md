@@ -21,7 +21,7 @@ For an example workspace, you can clone this source code repository [`Demonstrat
 
 [![roject Poster presented in SAT/SMT/AR Summer School 2016](https://github.com/ModelWriter/WP3/raw/master/Screenshots/poster.png)](https://github.com/ModelWriter/WP3/blob/master/Figures/Tarski_SummerSchool_Poster.pdf)
 
-### Type Hierarchy after loading an Alloy specification to the system (included several annotations)
+### Type Hierarchy after loading an Alloy specification to the system
 
 ![Type Hierarchy](https://github.com/ModelWriter/WP3/raw/master/Screenshots/RelationNames.png)
 
