@@ -2,12 +2,9 @@
 [![Stories in Research](https://badge.waffle.io/modelwriter/wp3.png?label=Research&title=Research)](https://waffle.io/modelwriter/wp3)
 [![Stories in State-of-the-Art](https://badge.waffle.io/modelwriter/wp3.png?label=SotA&title=State-of-the-Art)](https://waffle.io/modelwriter/wp3)
 
-Work Package 3 (Tarski Platform)
-===
-1. Introduction
----
+# Introduction
 
- In this work package, we introduce a new approach with its supporting platform which enables the user to interactively configure traceable elements and trace links. The specification is supported by formalizing the semantics of traceability in first-order relational logic in order to perform automated analysis such as consistency checking, reasoning on trace relations and trace element discovery. The usefulness of the approach is demonstrated in the context of application life-cycle platform in software industry and being tested in aviation industry.
+ In this work package, we introduce a new approach with its supporting platform which enables the user to interactively configure traceable elements and trace links. The specification is supported by formalizing the semantics of traceability in first-order relational logic in order to perform automated analysis such as consistency checking, reasoning on trace relations and trace element discovery. The usefulness of the approach is demonstrated in the context of application life-cycle platform in software industry and safety critical sofware development in automative industry and being tested in a use case in aviation industry.
  
  * [`Screen cast that shows Tarski in action (latest version of the platform)`](https://youtu.be/J7qEVOG6bjg)
  * [`Installation of Tarski Platform on ModelWriter (older version of the platform)`](https://youtu.be/NE7hESkaLCo)
@@ -16,29 +13,30 @@ For an example workspace, you can clone this source code repository [`Demonstrat
 
 [![roject Poster presented in SAT/SMT/AR Summer School 2016](https://github.com/ModelWriter/WP3/raw/master/Screenshots/poster.png)](https://github.com/ModelWriter/WP3/blob/master/Figures/Tarski_SummerSchool_Poster.pdf)
 
-**Type Hierarchy after loading an Alloy specification to the system (included several annotations)**
+### Type Hierarchy after loading an Alloy specification to the system (included several annotations)
 
 ![Type Hierarchy](https://github.com/ModelWriter/WP3/raw/master/Screenshots/RelationNames.png)
 
-**Management of first-order relational model**
+### Management of first-order relational model
 
 ![Management of first-order relational model](https://github.com/ModelWriter/WP3/raw/master/Screenshots/ModelManagement.png)
 
-**Assigning type to a unary relation while creating a trace element on a text file**
+### Assigning type to a unary relation while creating a trace element on a text file
 
-![Assigning type to a unary relation while creating a trace element on a text file](https://github.com/ModelWriter/WP3/blob/master/Screenshots/AssigningTypes.png)
+![Assigning type to a unary relation while creating a trace element on a text file](https://github.com/ModelWriter/WP3/raw/master/Screenshots/AssigningTypes.png)
 
-**Selecting a binary relation to create link**
+### Selecting a binary relation to create link
 
 ![Selecting a binary relation to create link](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingBinaryRelation.png)
 
-**Selecting a range from existing trace elements for the binary relation**
+### Selecting a range from existing trace elements for the binary relation
 
 ![Selecting a range from existing trace elements for the binary relation](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingRangeForAssigningTypes.png)
 
-**Automated Analysis**
+### Automated Analysis
 
 ![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Screenshots/automatedAnalysis.png)
+
 
 Work Package Objectives (from the Final Project Propsal)
 ---
@@ -77,3 +75,4 @@ These mechanisms will be based on a requirements synchronization framework that 
  3.	A model synchronization API. 
 
 *final version*
+
