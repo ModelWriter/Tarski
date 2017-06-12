@@ -19,31 +19,31 @@ alt="Tarski in Action" width="853" height="505" border="10" /></a>
 
 For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file, you can directly get from [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
 
-[![roject Poster presented in SAT/SMT/AR Summer School 2016](https://github.com/ModelWriter/WP3/raw/master/Screenshots/poster.png)](https://github.com/ModelWriter/WP3/blob/master/Figures/Tarski_SummerSchool_Poster.pdf)
+[![roject Poster presented in SAT/SMT/AR Summer School 2016](https://github.com/ModelWriter/Tarski/blob/gh-pages/Screenshots/poster.png)](https://github.com/ModelWriter/Tarski/blob/gh-pages/Figures/Tarski_SummerSchool_Poster.pdf)
 
 ### Type Hierarchy after loading an Alloy specification to the system (included several annotations)
 
-![Type Hierarchy](https://github.com/ModelWriter/WP3/raw/master/Screenshots/RelationNames.png)
+![Type Hierarchy](https://github.com/ModelWriter/Tarski/blob/gh-pages/Screenshots/RelationNames.png)
 
 ### Management of first-order relational model
 
-![Management of first-order relational model](https://github.com/ModelWriter/WP3/raw/master/Screenshots/ModelManagement.png)
+![Management of first-order relational model](https://github.com/ModelWriter/Tarski/blob/gh-pages/Screenshots/ModelManagement.png)
 
 ### Assigning type to a unary relation while creating a trace element on a text file
 
-![Assigning type to a unary relation while creating a trace element on a text file](https://github.com/ModelWriter/WP3/raw/master/Screenshots/AssigningTypes.png)
+![Assigning type to a unary relation while creating a trace element on a text file](https://github.com/ModelWriter/Tarski/blob/gh-pages/Screenshots/AssigningTypes.png)
 
 ### Selecting a binary relation to create link
 
-![Selecting a binary relation to create link](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingBinaryRelation.png)
+![Selecting a binary relation to create link](https://github.com/ModelWriter/Tarski/blob/gh-pages/Screenshots/SelectingBinaryRelation.png)
 
 ### Selecting a range from existing trace elements for the binary relation
 
-![Selecting a range from existing trace elements for the binary relation](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingRangeForAssigningTypes.png)
+![Selecting a range from existing trace elements for the binary relation](https://github.com/ModelWriter/Tarski/blob/gh-pages/Screenshots/SelectingRangeForAssigningTypes.png)
 
 ### Automated Analysis
 
-![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Screenshots/automatedAnalysis.png)
+![Automated Analysis](https://github.com/ModelWriter/Tarski/blob/gh-pages/Screenshots/automatedAnalysis.png)
 
 
 Work Package Objectives (from the Final Project Propsal)
