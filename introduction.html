@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <title>Tarski: A Platform for Automated Analysis of Traceability by </title>
+    <meta name="description" content="Automated Reasoning about Traces based on Configurable Formal Semantics"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Tarski: A Platform for Automated Analysis of Traceability</h1>
+      <h2 class="project-tagline">Automated Reasoning about Traces based on Configurable Formal Semantics</h2>
+      <a href="https://github.com/ModelWriter/Tarski" class="btn">View on GitHub</a>
+      <a href="https://itea3.org/project/modelwriter.html" class="btn">ITEA-ModelWriter Project</a>
+      <a href="https://itea3.org/project/assume.html" class="btn">ITEA-ASSUME Project</a>
+      <a href="https://github.com/ModelWriter/Tarski/releases" class="btn">Releases</a>
+      <!--<a href="https://github.com/ModelWriter/Tarski/tarball/master" class="btn">Download .tar.gz</a>-->
+    </section>
+
+    <section class="main-content">
+      
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/J7qEVOG6bjg" frameborder="0" allowfullscreen="">
+  </iframe>
+</div>
+
+<h1 id="introduction">Introduction</h1>
+
+<p>In this work package, we introduce a new approach with its supporting platform which enables the user to interactively configure traceable elements and trace links. The specification is supported by formalizing the semantics of traceability in first-order relational logic in order to perform automated analysis such as consistency checking, reasoning on trace relations and trace element discovery. The usefulness of the approach is demonstrated in the context of application life-cycle platform in software industry and safety critical sofware development in automative industry and being tested in a use case in aviation industry.</p>
+
+<ul>
+  <li><a href="https://youtu.be/J7qEVOG6bjg"><code class="highlighter-rouge">Screen cast that shows Tarski in action (latest version of the platform)</code></a></li>
+  <li><a href="https://youtu.be/NE7hESkaLCo"><code class="highlighter-rouge">Installation of Tarski Platform on ModelWriter (older version of the platform)</code></a></li>
+</ul>
+
+<p>For an example workspace, you can clone this source code repository <a href="https://github.com/ModelWriter/Demonstrations"><code class="highlighter-rouge">Demonstrations</code></a> and an example configuration file, you can directly get from <a href="https://goo.gl/8Zqxi8"><code class="highlighter-rouge">HAVELSAN use case</code></a>.</p>
+
+<p><a href="Figures/Tarski_SummerSchool_Poster.pdf"><img src="Screenshots/poster.png" alt="roject Poster presented in SAT/SMT/AR Summer School 2016" /></a></p>
+
+<h3 id="type-hierarchy-after-loading-an-alloy-specification-to-the-system">Type Hierarchy after loading an Alloy specification to the system</h3>
+
+<p><img src="Screenshots/RelationNames.png" alt="Type Hierarchy" /></p>
+
+<h3 id="management-of-first-order-relational-model">Management of first-order relational model</h3>
+
+<p><img src="Screenshots/ModelManagement.png" alt="Management of first-order relational model" /></p>
+
+<h3 id="assigning-type-to-a-unary-relation-while-creating-a-trace-element-on-a-text-file">Assigning type to a unary relation while creating a trace element on a text file</h3>
+
+<p><img src="Screenshots/AssigningTypes.png" alt="Assigning type to a unary relation while creating a trace element on a text file" /></p>
+
+<h3 id="selecting-a-binary-relation-to-create-link">Selecting a binary relation to create link</h3>
+
+<p><img src="Screenshots/SelectingBinaryRelation.png" alt="Selecting a binary relation to create link" /></p>
+
+<h3 id="selecting-a-range-from-existing-trace-elements-for-the-binary-relation">Selecting a range from existing trace elements for the binary relation</h3>
+
+<p><img src="Screenshots/SelectingRangeForAssigningTypes.png" alt="Selecting a range from existing trace elements for the binary relation" /></p>
+
+<h3 id="automated-analysis">Automated Analysis</h3>
+
+<p><img src="Screenshots/automatedAnalysis.png" alt="Automated Analysis" /></p>
+
+<h2 id="work-package-objectives-from-the-final-project-propsal">Work Package Objectives (from the Final Project Propsal)</h2>
+
+<p>The primary objective of this WP is to provide the <code class="highlighter-rouge">synchronization mechanism</code> of the ModelWriter platform that will keep the <code class="highlighter-rouge">user-visible models</code> consistent with the <code class="highlighter-rouge">KB-stored models</code> and vice versa. This work package addresses all problems related to the “model-to-model transformations” in ModelWriter.</p>
+
+<ul>
+  <li>By <code class="highlighter-rouge">user-visible models</code> is meant those models that have been explicitly created by a Technical Author, using e.g. a spreadsheet, a kind of UML diagram, a block diagram, a mind map, etc. or any modelling tool (part of the “Model” side of ModelWriter) he has found the most appropriate for authoring his technical information.</li>
+  <li>By <code class="highlighter-rouge">KB-stored model</code> is meant a part of the Knowledge Base devoted to storing pieces of related information, disregarding whether it is represented in user-visible models, in natural-language documents, or in both.</li>
+</ul>
+
+<p>This mechanism will be based on <code class="highlighter-rouge">model-to-model (M2M) transformations</code> of two complementary categories:</p>
+
+<ul>
+  <li>WP3.1, for transforming a <code class="highlighter-rouge">user-visible model</code> to a KB-stored model (this “mirrors” WP2.1).</li>
+  <li>WP3.2, for transforming a <code class="highlighter-rouge">KB-stored model</code> into a user-visible model (this “mirrors” WP2.2).</li>
+</ul>
+
+<h2 id="expected-results">Expected Results</h2>
+
+<p>An Eclipse-based M2M Transformation Framework, extensible so as to accommodate an increasing number of types of (user-visible) models. This will consist of the following main envisioned plug-in components:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Transformation Manager</code>: provides the infrastructure to register and launch transformations.</li>
+  <li><code class="highlighter-rouge">Configuration Manager</code>: for personalizing the behaviour of the framework to meet the needs of a specific standard / organization / project / individual.</li>
+  <li><code class="highlighter-rouge">Traceability Manage</code>: keeps links between elements of user-visible models and elements of the KB.</li>
+  <li><code class="highlighter-rouge">Synchronization Manager</code>: triggering transformations when synchronization is needed.</li>
+</ul>
+
+<h2 id="approach-for-the-work-package">Approach for the Work Package</h2>
+
+<p>The main goal of this WP is to develop a M2M Transformation Framework that supports the synchronization mechanisms for the ModelWriter tool.</p>
+
+<p>These mechanisms will be based on a requirements synchronization framework that can be extended to support different requirements models (based on both textual and/or visual notations). The framework is made up of three main components:</p>
+
+<ol>
+  <li>A meta-modelling infrastructure,</li>
+  <li>A DSL for model transformation specifications, and</li>
+  <li>A model synchronization API.</li>
+</ol>
+
+<p><em>final version</em></p>
+
+<p><a href="https://waffle.io/modelwriter/wp3"><img src="https://badge.waffle.io/modelwriter/wp3.png?label=in%20progress&amp;title=Implementation" alt="Stories in Implementation" /></a>
+<a href="https://waffle.io/modelwriter/wp3"><img src="https://badge.waffle.io/modelwriter/wp3.png?label=Research&amp;title=Research" alt="Stories in Research" /></a>
+<a href="https://waffle.io/modelwriter/wp3"><img src="https://badge.waffle.io/modelwriter/wp3.png?label=SotA&amp;title=State-of-the-Art" alt="Stories in State-of-the-Art" /></a></p>
+
+
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/ModelWriter/Tarski">Tarski</a> is maintained by <a href="https://github.com/ModelWriter">ModelWriter</a>.</span>
+        <!--<span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>-->
+      </footer>
+    </section>
+
+    
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
