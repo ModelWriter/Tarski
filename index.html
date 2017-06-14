@@ -205,16 +205,18 @@ We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)<
 <div class="panel panel-info"> 
 	<div class="panel-heading">Evaluation Results </div> 
 	<div class="panel-body">Details about evaluation result of the system for three different instances given the above specification. Minisat <a href="#Minisat">(Eén &amp; Sörensson, 2003)</a> Sat Solver is chosen for both Alloy (alloy4.2-2015-02-22.jar) and KodKod (Kodkod 2.1) solvers. From Alloy to SMT solver translation for these cases, we employ the translation method proposed by El Ghazi et.al. <a href="#ElGhazi2011">(Ghazi &amp; Taghdiri, 2011)</a> and the problems are encoded in SMT-LIB <a href="#smtlib">(Barrett, Stump, Tinelli, &amp; others, 2010)</a> syntax which is fed into Z3 solver <a href="#z3">(Moura &amp; Bjørner, 2008)</a>. Solving times are indicated in milliseconds.</div> 
-	<table class="table table-striped table-hover table-responsive"> 
-		<thead>
-			<tr> <th>#</th> <th>Loc.</th> <th>Traces</th> <th>Inferred</th> <th>Alloy</th> <th>KodKod</th> <th>Z3</th> </tr> 
-		</thead> 
-		<tbody> 
-			<tr> <th scope="row">1</th> <td>125</td> <td>138</td> <td>502</td>  <td>67922</td>  <td>25668</td> <td>40.9</td> </tr> 
-			<tr> <th scope="row">2</th> <td> 47</td> <td>102</td> <td>145</td>  <td> 4428</td>  <td>   84</td> <td>0.48</td> </tr> 
-			<tr> <th scope="row">3</th> <td> 16</td> <td> 21</td> <td> 53</td>  <td>  724</td>  <td>    1</td> <td>1.46</td> </tr> 
-		</tbody>
-	</table>
+	<div style="overflow-y: hidden">
+		<table class="table table-striped table-hover table-responsive"> 
+			<thead>
+				<tr> <th>#</th> <th>Loc.</th> <th>Traces</th> <th>Inferred</th> <th>Alloy</th> <th>KodKod</th> <th>Z3</th> </tr> 
+			</thead> 
+			<tbody> 
+				<tr> <th scope="row">1</th> <td>125</td> <td>138</td> <td>502</td>  <td>67922</td>  <td>25668</td> <td>40.9</td> </tr> 
+				<tr> <th scope="row">2</th> <td> 47</td> <td>102</td> <td>145</td>  <td> 4428</td>  <td>   84</td> <td>0.48</td> </tr> 
+				<tr> <th scope="row">3</th> <td> 16</td> <td> 21</td> <td> 53</td>  <td>  724</td>  <td>    1</td> <td>1.46</td> </tr> 
+			</tbody>
+		</table>
+	</div>
 </div>
 
 
