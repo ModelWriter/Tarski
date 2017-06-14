@@ -73,6 +73,17 @@
   </div>
 </div>
 
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Features</div>
+        <div class="panel-body">
+        Tarski is a tool that supports automated reasoning about traces based on configurable trace semantics, recently described in <a href="#ferhat2017SAC:PL">(Erata et al., 2017)</a>. It has been implemented as a set of Eclipse plug-ins that activate the user interfaces and provides the features specifying trace types and their semantics, assigning traces in the artifacts using user-defined trace types, and reasoning about traces (i.e., deducing new traces and checking consistency of traces).
+        </div>
+      </div>
+    </div>
+</div>
+
 <div class="list-group">
   <a href="#configuration" class="list-group-item list-group-item-success">Specification of Trace Semantics</a>
   <a href="#tracing" class="list-group-item list-group-item-info">Trace Assignment in Project Artifacts</a>
@@ -180,9 +191,20 @@
   </div>
 </div>
 
-<div class="panel panel-default"> 
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="panel panel-success">
+        <div class="panel-heading">Implementation</div>
+        <div class="panel-body">
+We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)</a>, an efficient SAT-based finite model finder for relational logic, to perform automated trace reasoning using the user-defined semantics. Trace types and their semantics are specified in the restricted form of Alloy, while the artifacts containing manually assigned traces are automatically transformed into Alloy specifications. Using the trace semantics and the artifacts in Alloy <a href="#AlloyBook">(Jackson, 2012)</a>, we directly call KodKod API (missing reference) to reason about traces.
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="panel panel-info"> 
 	<div class="panel-heading">Evaluation Results </div> 
-	<div class="panel-body">Details about evaluation result of the system for three different instances given the above specification </div> 
+	<div class="panel-body">Details about evaluation result of the system for three different instances given the above specification. Minisat <a href="#Minisat">(Eén &amp; Sörensson, 2003)</a> Sat Solver is chosen for both Alloy (alloy4.2-2015-02-22.jar) and KodKod (Kodkod 2.1) solvers. From Alloy to SMT solver translation for these cases, we employ the translation method proposed by El Ghazi et.al. <a href="#ElGhazi2011">(Ghazi &amp; Taghdiri, 2011)</a> and the problems are encoded in SMT-LIB <a href="#smtlib">(Barrett, Stump, Tinelli, &amp; others, 2010)</a> syntax which is fed into Z3 solver <a href="#z3">(Moura &amp; Bjørner, 2008)</a>.</div> 
 	<table class="table table-striped"> 
 		<thead>
 			<tr> <th>#</th> <th>Loc.</th> <th>Traces</th> <th>Inferred</th> <th>Alloy</th> <th>KodKod</th> <th>Z3</th> </tr> 
@@ -195,6 +217,26 @@
 	</table>
 </div>
 
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">References</div>
+        <div class="panel-body">
+          <ol class="bibliography"><li><span id="ferhat2017SAC:PL">Erata, F., Challenger, M., Tekinerdogan, B., Monceaux, A., Tüzün, E., &amp; Kardas, G. (2017). Tarski: A Platform for Automated Analysis of Dynamically Configurable Traceability Semantics. In <i>Proceedings of the Symposium on Applied Computing</i> (pp. 1607–1614). New York, NY, USA: ACM. http://doi.org/10.1145/3019612.3019747</span></li>
+<li><span id="Torlak:2007">Torlak, E., &amp; Jackson, D. (2007). Kodkod: A Relational Model Finder. In <i>the 13th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS’07)</i> (pp. 632–647).</span></li>
+<li><span id="KodKodPhdThesis">Torlak, E. (2008). <i>A Constraint Solver for Software Engineering: Finding Models and Cores of Large Relational Specifications</i> (PhD thesis). Massachusetts Institute of Technology.</span></li>
+<li><span id="AlloyBook">Jackson, D. (2012). <i>Software Abstractions: Logic, Language, and Analysis</i>. MIT press.</span></li>
+<li><span id="Minisat">Eén, N., &amp; Sörensson, N. (2003). An Extensible SAT-solver. In <i>the 6th International Conference on Theory and Applications of Satisfiability Testing (SAT’03)</i> (pp. 502–518).</span></li>
+<li><span id="ElGhazi2011">Ghazi, A. A. E., &amp; Taghdiri, M. (2011). Relational Reasoning via SMT Solving. In <i>the 17th International Conference on Formal Methods (FM’11)</i> (pp. 133–148).</span></li>
+<li><span id="smtlib">Barrett, C., Stump, A., Tinelli, C., &amp; others. (2010). The smt-lib Standard: Version 2.0. In <i>the 8th International Workshop on Satisfiability Modulo Theories</i> (Vol. 13, p. 14).</span></li>
+<li><span id="z3">Moura, L. D., &amp; Bjørner, N. (2008). Z3: An efficient SMT solver. In <i>International conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS’08)</i> (pp. 337–340).</span></li></ol>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!--
 <div class="row">
     <div class="col-sm-12 col-md-6">
       <div class="panel panel-default">
@@ -225,6 +267,7 @@
       </div>
     </div>
 </div>
+-->
 
 <!--
 <div  class="list-group">
