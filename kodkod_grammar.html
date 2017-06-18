@@ -32,14 +32,19 @@
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
 		  TeX: { 
-		  	equationNumbers: { autoNumber: "AMS" }
-		  }
+		  	equationNumbers: { autoNumber: "AMS" },
+		  	linebreaks: {automatic: true}
+		  },
+		  SVG: { 
+            linebreaks: { automatic: true } 
+    	  }
 		});
 	</script>
 	<!--      displayAlign: ["left"], -->
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
 		  jax: ["input/TeX","output/SVG", "output/PreviewHTML"],
+ 		  displayAlign: ["left"],
 		  extensions: ["tex2jax.js","MathZoom.js", "fast-preview.js", "AssistiveMML.js", "a11y/accessibility-menu.js"],
 		  TeX: {
 			extensions: ["AMSmath.js","AMSsymbols.js","noUndefined.js"]
@@ -85,58 +90,76 @@
 		  <hr>
 	  </noscript>
 	
-      <!-- http://docs.mathjax.org/en/latest/tex.html -->
-
-<div class="row">
-    <div class="col-sm-12 col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">The Lorenz Equations</div>
-        <div class="panel-body">
-          	\begin{align}
-			\dot{x} & = \sigma(y-x) \label{eq:sample} \\ 
-			\dot{y} & = \rho x - y - xz \\
-			\dot{z} & = -\beta z + xy
-			\end{align}
-        </div>
-      </div>
-      <div class="panel panel-primary">
-        <div class="panel-heading">The Cauchy-Schwarz Inequality</div>
-        <div class="panel-body">
-          	\[
-			\left( \sum_{k=1}^n a_k b_k \right)^{\!\!2} \leq
-			 \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
-			\]
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-12 col-md-6">
+      <div class="row">
+    <div class="col-sm-12 col-md-12">
       <div class="panel panel-success">
-        <div class="panel-heading">A Cross Product Formula</div>
+        <div class="panel-heading">Supported KodKod Syntax</div>
         <div class="panel-body">
-          	\[
-			  \mathbf{V}_1 \times \mathbf{V}_2 =
-			   \begin{vmatrix}
-				\mathbf{i} & \mathbf{j} & \mathbf{k} \\
-				\frac{\partial X}{\partial u} & \frac{\partial Y}{\partial u} & 0  \\
-				\frac{\partial X}{\partial v} & \frac{\partial Y}{\partial v} & 0 \\
-			   \end{vmatrix}
-			\]
-        </div>
-      </div>
-      <div class="panel panel-info">
-        <div class="panel-heading">Maxwell's Equations</div>
-        <div class="panel-body">
-          	\begin{align}
-			  \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} & = \frac{4\pi}{c}\vec{\mathbf{j}} \label{eq:sample2}\\
-			  \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-			  \nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-			  \nabla \cdot \vec{\mathbf{B}} & = 0
-			\end{align}
-        </div>
-      </div>
+        <div style="font-size: 80%;">
+    \begin{align}
+    \notag problem  &::= universe \ relDecl^{\ast} formula^{\ast} \\
+    \notag universe &::= \{atom^{\ast} \} \\
+    \notag relDecl  &::= relation:_{arity}[constant,constant] \\
+    \notag constant &::= \{tuple^{\ast} \} \\
+    \notag tuple    &::= \langle atom^{\ast} \rangle \\
+    \notag arity    &::= positive integer \\
+    \notag relation &::= identifier \\
+    \notag atom     &::= identifier  \\
+
+    \notag formula  &::= \\
+             &expr \subset expr               \tag{subset}            \label{syn:subset} \\ 
+    \mid \   &expr=expr                       \tag{equality}          \label{syn:equality} \\
+    \mid \   &\bold{some} \ expr              \tag{non_empty}         \label{syn:nonempty} \\
+    \mid \   &\bold{one}  \ expr              \tag{exactly one}       \label{syn:exactlyone} \\
+    \mid \   &\bold{lone} \ expr              \tag{empty or one}      \label{syn:emptyorone} \\
+    \mid \   &\bold{no}   \ expr              \tag{empty}             \label{syn:empty} \\
+    \mid \   &\neg formula                    \tag{negation}          \label{syn:negation} \\
+    \mid \   &formula \wedge formula          \tag{conjuction}        \label{syn:conjunction} \\
+    \mid \   &formula \vee formula            \tag{disjunction}       \label{syn:disjunction} \\
+    \mid \   &formula \Rightarrow formula     \tag{implication}       \label{syn:implication} \\
+    \mid \   &\forall \ varDecls \mid formula \tag{universal}         \label{syn:universal} \\
+    \mid \   &\exists \ varDecls \mid formula \tag{existential}       \label{syn:existential} \\
+    \mid \   &intexpr \{= \bold{\mid} < \bold{\mid} > \} \ intexpr
+                                              \tag{int comparison}    \label{syn:intcomparison} \\
+                                              
+    \notag expr     &::=  \\
+             &var                             \tag{variable}          \label{syn:variable} \\ 
+    \mid \   &expr=expr                       \tag{equality}          \label{syn:exprequality} \\
+    \mid \   &\sim expr                       \tag{transpose}         \label{syn:transpose} \\
+    \mid \   &\hat \ expr         			  \tag{clousure}          \label{syn:clousure} \\
+    \mid \   &expr \cup expr                  \tag{union}             \label{syn:union} \\
+    \mid \   &expr \cap expr                  \tag{intersection}      \label{syn:intersection} \\
+    \mid \   &expr \setminus expr             \tag{difference}        \label{syn:difference} \\
+    \mid \   &expr \cdot expr                 \tag{join}              \label{syn:join} \\
+    \mid \   &expr \rightarrow expr           \tag{product}           \label{syn:product} \\
+    \mid \   &formula \, ? \; expr \; : \; expr  
+                                              \tag{conditional}       \label{syn:conditional} \\
+    \mid \   &\{varDcls \mid formula \}       \tag{comprehension}     \label{syn:comprehension} \\
+    \mid \   &\pi (expr,intexpr^{\ast})       \tag{projection}        \label{syn:projection} \\
+    \mid \   &\bold{int2expr} (intexpr)       \tag{int \ cast}        \label{syn:intcast} \\
+    \mid \   &\bold{univ}                     \tag{universe}          \label{syn:universe} \\
+    
+    \notag intexpr  &\::= \\
+             &integer                        \tag{literal}            \label{syn:literal} \\
+    \mid \   &expr                           \tag{cardinality}        \label{syn:cardinality} \\
+    \mid \   &\bold{sum} \; (e)              \tag{sum}                \label{syn:sum} \\
+
+    \mid \   &\sum{} VarDecl \mid Expr       \tag{summation}          \label{syn:summation} \\
+    \mid \   &intexpr \; \{ + \mid \_ \mid \times \mid \div \} \; intexpr 
+                                             \tag{arithmetic}         \label{syn:arithmetic} \\
+    \mid \   &intexpr \; \{ \mid \ \mid \& \mid \hat{\; } \} \; intexpr
+                                             \tag{bitwise \ ops}      \label{syn:bitwiseops} \\
+    \mid \   &intexpr \; \{ \ll \mid \gg \mid \ggg \} intexpr 
+                                             \tag{bitshifts}          \label{syn:bitshifts} \\
+    \notag varDecls &::= (variable:expr)^{\ast} \\
+    \notag variable &::= identifier \\ 
+    \end{align}
+    </div>
+         </div>
+      </div>	
     </div>
 </div>
-
+<!--
 <div class="row">
     <div class="col-sm-12 col-md-12">
       <div class="panel panel-default">
@@ -146,14 +169,14 @@
 			ability to mix math and text in a paragraph is also important.  This
 			expression \(\sqrt{3x-1}+(1+x)^2\) is an example of an inline equation.  As
 			you see, MathJax equations can be used this way as well, without unduly
-			disturbing the spacing between lines. In equation \eqref{eq:sample}, we find the value of an 
-			interesting integral: ... In equation \eqref{eq:sample2}, we find the value of an 
+			disturbing the spacing between lines. In equation \eqref{syn:product}, we find the value of an 
+			interesting integral: ... In equation \eqref{eq:subset}, we find the value of an 
 			interesting integral: ...
         </div>
       </div>
     </div>
 </div>
-
+-->
 
 
       
