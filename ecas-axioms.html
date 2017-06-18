@@ -43,11 +43,8 @@
 	<!--      displayAlign: ["left"], -->
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
-		  jax: ["input/TeX","output/SVG"],
- 		  displayAlign: ["center"],
- 		  showMathMenu: false,
- 		  showMathMenuMSIE: false,
-		  extensions: ["tex2jax.js"],
+		  jax: ["input/TeX","output/SVG", "output/PreviewHTML"],
+		  extensions: ["tex2jax.js","MathZoom.js", "fast-preview.js", "AssistiveMML.js", "a11y/accessibility-menu.js"],
 		  TeX: {
 			extensions: ["AMSmath.js","AMSsymbols.js","noUndefined.js"]
 		  }
@@ -70,7 +67,6 @@
     <section class="page-header">
       <h1 class="project-name">Tarski: A Platform for Automated Analysis of Traceability</h1>
       <h2 class="project-tagline">Automated Reasoning about Traces based on Configurable Formal Semantics</h2>
-      <a href="index.html" class="btn">Home</a>
       <a href="https://github.com/ModelWriter/Tarski" class="btn">View on GitHub</a>
       <a href="https://itea3.org/project/modelwriter.html" class="btn">ITEA-ModelWriter Project</a>
       <a href="https://itea3.org/project/assume.html" class="btn">ITEA-ASSUME Project</a>
