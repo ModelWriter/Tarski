@@ -29,7 +29,21 @@
 			document.getElementById("hide_page").style.visibility = "";
 	    });
 	</script>
-	<script type="text/javascript" src="MathJax/MathJax.js?config=TeX-AMS_SVG.js"></script>
+	<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+		  jax: ["input/TeX","output/SVG", "output/PreviewHTML"],
+		  extensions: ["tex2jax.js","MathZoom.js", "fast-preview.js", "AssistiveMML.js", "a11y/accessibility-menu.js"],
+		  TeX: {
+			extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+		  }
+		});
+	</script>
+	<script type="text/javascript" src="MathJax/MathJax.js"></script>
   </head>
   <body>
     <section class="page-header">
@@ -57,13 +71,14 @@
 		  <hr>
 	  </noscript>
 	
-      <div class="row">
+      <!-- http://docs.mathjax.org/en/latest/tex.html -->
+<div class="row">
     <div class="col-sm-12 col-md-6">
       <div class="panel panel-default">
         <div class="panel-heading">The Lorenz Equations</div>
         <div class="panel-body">
           	\begin{align}
-			\dot{x} & = \sigma(y-x) \\
+			\dot{x} & = \sigma(y-x) \label{eq:sample} \\ 
 			\dot{y} & = \rho x - y - xz \\
 			\dot{z} & = -\beta z + xy
 			\end{align}
@@ -87,7 +102,7 @@
 			  \mathbf{V}_1 \times \mathbf{V}_2 =
 			   \begin{vmatrix}
 				\mathbf{i} & \mathbf{j} & \mathbf{k} \\
-				\frac{\partial X}{\partial u} & \frac{\partial Y}{\partial u} & 0 \\
+				\frac{\partial X}{\partial u} & \frac{\partial Y}{\partial u} & 0  \\
 				\frac{\partial X}{\partial v} & \frac{\partial Y}{\partial v} & 0 \\
 			   \end{vmatrix}
 			\]
@@ -97,7 +112,7 @@
         <div class="panel-heading">Maxwell's Equations</div>
         <div class="panel-body">
           	\begin{align}
-			  \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} & = \frac{4\pi}{c}\vec{\mathbf{j}} \\
+			  \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} & = \frac{4\pi}{c}\vec{\mathbf{j}} \label{eq:sample2}\\
 			  \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
 			  \nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
 			  \nabla \cdot \vec{\mathbf{B}} & = 0
@@ -116,7 +131,9 @@
 			ability to mix math and text in a paragraph is also important.  This
 			expression \(\sqrt{3x-1}+(1+x)^2\) is an example of an inline equation.  As
 			you see, MathJax equations can be used this way as well, without unduly
-			disturbing the spacing between lines.
+			disturbing the spacing between lines. In equation \eqref{eq:sample}, we find the value of an 
+			interesting integral: ... In equation \eqref{eq:sample2}, we find the value of an 
+			interesting integral: ...
         </div>
       </div>
     </div>
