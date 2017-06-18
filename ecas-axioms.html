@@ -32,15 +32,22 @@
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
 		  TeX: { 
-		  	equationNumbers: { autoNumber: "AMS" }
-		  }
+		  	equationNumbers: { autoNumber: "AMS" },
+		  	linebreaks: {automatic: true}
+		  },
+		  SVG: { 
+            linebreaks: { automatic: true } 
+    	  }
 		});
 	</script>
 	<!--      displayAlign: ["left"], -->
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
-		  jax: ["input/TeX","output/SVG", "output/PreviewHTML"],
-		  extensions: ["tex2jax.js","MathZoom.js", "fast-preview.js", "AssistiveMML.js", "a11y/accessibility-menu.js"],
+		  jax: ["input/TeX","output/SVG"],
+ 		  displayAlign: ["left"],
+ 		  showMathMenu: false,
+ 		  showMathMenuMSIE: false,
+		  extensions: ["tex2jax.js"],
 		  TeX: {
 			extensions: ["AMSmath.js","AMSsymbols.js","noUndefined.js"]
 		  }
@@ -63,6 +70,7 @@
     <section class="page-header">
       <h1 class="project-name">Tarski: A Platform for Automated Analysis of Traceability</h1>
       <h2 class="project-tagline">Automated Reasoning about Traces based on Configurable Formal Semantics</h2>
+      <a href="index.html" class="btn">Home</a>
       <a href="https://github.com/ModelWriter/Tarski" class="btn">View on GitHub</a>
       <a href="https://itea3.org/project/modelwriter.html" class="btn">ITEA-ModelWriter Project</a>
       <a href="https://itea3.org/project/assume.html" class="btn">ITEA-ASSUME Project</a>
@@ -85,18 +93,122 @@
 		  <hr>
 	  </noscript>
 	
-      <div class="row">
+      <div class="bs-callout bs-callout-success">
+  <h3>Axiomatization</h3>
+  In the following several axiom schemas are listed to formalize Traceability Theory, that is used in the Electronically Controlled Air Suspension (ECAS) System case study.
+</div>
+
+<div class="row">
     <div class="col-sm-12 col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading">Supported KodKod Syntax</div>
-        <div class="panel-body">
+        <div class="panel-heading">Reasoning about <i>equals</i> relation</div>
+        <div class="panel-body" >
     \begin{align}
-
+    \vdash \forall a, b, c \in A &\mid (a,b) \in equals \wedge\, (b,c) \in \square \to (a,c) \in \square \\
+    \vdash \forall a, b, c \in A &\mid (a,b) \in equals \wedge\, (c,b) \in square \to (c,a) \in \square \\
+    \vdash \forall a \in A &\mid (a,a) \in equals \\
+    \notag\text{where} \; \square &\in \; \{ contains , requires , refines , satisfies, conflicts \}
     \end{align}
          </div>
       </div>	
     </div>
 </div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Reasoning about <i>requires</i> relation</div>
+        <div class="panel-body">
+    \begin{align}
+	\vdash \forall a, b, c \in A &\mid (a,b) \in \square \wedge\, (b,c) \in require \to (a,c) \in require \\
+	\vdash \forall a, b, c \in A &\mid (a,b) \in require \wedge\, (b,c) \in \square \to (a,c) \in require \\
+	\notag\text{where } \; \square &\in \; \{ requires, refines , contains \}
+    \end{align}
+         </div>
+      </div>	
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Reasoning about <i>satisfies</i> relation</div>
+        <div class="panel-body">
+    \begin{align}
+	\vdash \forall a, b, c \in A &\mid (a,b) \in \square \wedge\, (c,b) \in satisfies \to (c,a) \in satisfies \\
+	\vdash \forall a, b, c \in A &\mid (a,b) \in \square \wedge\, (b,c) \in satisfies \to (a,c) \in satisfies \\
+	\notag\text{where} \; \square &= refines
+    \end{align}
+         </div>
+      </div>	
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Reasoning about <i>conflicts</i> relation</div>
+        <div class="panel-body">
+    \begin{align}
+	\vdash \forall a, b, c \in A &\mid (a,b) \in \square \wedge (b,c) \in conflicts \to (a,c) \in conflicts \\
+	\vdash \forall a \in A &\mid (a,a) \in conflicts \\
+	\notag\text{where} \; \square &\in \; \{ requires , refines , contains \}
+    \end{align}
+         </div>
+      </div>	
+    </div>
+</div>
+
+<div class="bs-callout bs-callout-success">
+    In the following axiom schema, transitivity \eqref{transitivity} is used for reasoning new traces, whereas ant-symmetry \eqref{anti-symmetry} and irreflexivity \eqref{irreflexivity} are used to check consistency.
+    \begin{align}
+	\vdash \forall a, b, c \in A &\mid (a,b) \in \square \wedge (b,c) \in \square \to (a,c) \in \square  , \label{transitivity}  \\
+    \vdash \forall a, b \in A &\mid (a,b) \in \square \wedge (b,a) \in \square \to a = b , \label{anti-symmetry}  \\
+    \vdash \forall a \in A &\mid (a,a) \notin \square, \label{irreflexivity} \\
+    \notag\text{where} \;  \square &\in \; \{ contains , requires , refines , satisfies \} 
+    \end{align}
+</div>
+
+<div class="bs-callout bs-callout-info">
+    Consistency of \textit{contains} Relation, which is left-unique (injective relation):
+    \begin{align}
+	\vdash \forall a, a', b \in A &\mid (a,b) \in \square \wedge (a',b) \in \square \to a = a' \\
+	\notag\text{where} \; \square &= contains 
+    \end{align}
+</div>
+
+<div class="bs-callout bs-callout-danger">
+    For instance, in addition to the previously defined axioms using the following axiom schema \eqref{consistency}, the system detects an inconsistency between two requirements, \(r_{60}\) and \(r_{59}\) as shown in the following Table.
+    \begin{align}
+	\forall a, b \in A &\mid (a,b) \in \square \to (a,b) \notin \triangle \wedge (b,a) \notin \triangle, \text{where} \; \label{consistency} \\
+	\notag \text{for each} \; \square &\in  \{ requires , refines , satisfies , contains , conflicts \} \\
+	\notag ( requires \; \cup \; &refines \; \cup \; satisfies \; \cup \; contains \; \cup \; conflicts) \setminus \square \mapsto \triangle
+    \end{align}
+</div>
+
+<div class="panel panel-info"> 
+	<div class="panel-heading">Some Requirements and Code Fragments in ECAS </div> 
+	<div class="panel-body">
+	<div style="overflow-y: hidden">
+		<table class="table table-striped table-hover table-responsive"> 
+			<thead>
+				<tr> <th>#</th> <th>Requirements/Code Fragments</th> </tr> 
+			</thead> 
+			<tbody> 
+				<tr> <th scope="row">\(r_{11}\)</th> <td>The system shall do height corrections using long and short term filtered height sensor signal.</td> </tr> 
+				<tr> <th scope="row">\(r_{59}\)</th> <td>The system shall always use height sensors in the range of 0-5V to avoid long term signal filtering.</td> </tr> 
+				<tr> <th scope="row">\(r_{60}\)</th> <td>The system shall do height corrections using long and short term filtered height sensor signal with 10ms interval.</td> </tr> 
+				<tr> <th scope="row">\(r_{97}\)</th> <td>The system shall filter height sensor signal in short term and long term for height corrections.</td> </tr>
+				<tr> <th scope="row">\(r_{98}\)</th> <td>The system shall filter height sensor signal in long term for height corrections.</td> </tr>
+				<tr> <th scope="row">\(r_{14}\)</th> <td><code>vehicle::ecas::processHeightSensor::filterSignal</code></td> </tr>
+				<tr> <th scope="row">\(i_{72}\)</th> <td><code>vehicle::ecas::processHeightSensor</code></td> </tr>
+			</tbody>
+		</table>
+	</div>
+	</div>
+</div>
+
+<a href="./" class="btn_b btn-primary" role="button"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>Back</a>
 
 <!--
 <div class="row">
