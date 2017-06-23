@@ -12,8 +12,8 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <title>Tarski: A Platform for Automated Analysis of Traceability by Ferhat Erata</title>
-    <meta name="description" content="Automated Reasoning about Traces based on Configurable Formal Semantics"/>
+    <title>Text Locations | Tarski: A Platform for Automated Analysis of Traceability by Ferhat Erata</title>
+    <meta name="description" content="In Tarski, each trace-location and trace-link subject to formal analysis must be annotated with a type from the hierarchy obtained from the <code>signature</code> and the <code>field</code> declarations on the specification. For instance, several text fragments on a requirement document are annotated with artifact types. Blue markers indicate <code>TextLocations</code> which are not linked, whereas a red one indicates a trace-location that has at least one outgoing trace-link. Likewise, the user can create a trace-link using the wizards presented to her/him in the same direction of <code>field</code> declaration."/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -38,11 +38,51 @@
     </section>
 
     <section class="main-content">
-      <h2 id="welcome-to-another-page">Welcome to another page</h2>
+      
 
-<p><em>yay</em></p>
 
-<p><a href="./">back</a></p>
+<div class="panel panel-info">
+    <div class="panel-heading">Text Locations</div> 
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6" align="center"> 
+                <div class="thumbnail"><a href="/Tarski/Figures/TextLocation.gif" class=""><img src="/Tarski/Figures/TextLocation.gif" alt="..."></a></div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6"> 
+                In Tarski, each trace-location and trace-link subject to formal analysis must be annotated with a type from the hierarchy obtained from the <code>signature</code> and the <code>field</code> declarations on the specification. For instance, several text fragments on a requirement document are annotated with artifact types. Blue markers indicate <code>TextLocations</code> which are not linked, whereas a red one indicates a trace-location that has at least one outgoing trace-link. Likewise, the user can create a trace-link using the wizards presented to her/him in the same direction of <code>field</code> declaration.
+            </div>
+        </div>  
+    </div>  
+    <div class="panel-footer">
+        <a id="back" href="/Tarski/" data-original-title="Back to the previous page" data-toggle="tooltip" role="button" class="btn_b btn-sm btn-info"><i class="glyphicon glyphicon-remove"></i></a>
+    </div>
+</div>
+
+<!--<a id="back" href="/" class="btn_b btn-primary" role="button"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>Back</a>-->
+<script type="text/javascript">
+    $('a#back').click(function(){goBackOrGoHome();})
+</script>
+
+<script type="text/javascript">
+home_url = "/Tarski/";
+
+pathArray = document.referrer.split( '/' );
+protocol = pathArray[0];
+host = pathArray[2];
+
+url_before = protocol + '//' + host;
+
+url_now = window.location.protocol + "//" + window.location.host;
+
+
+function goBackOrGoHome(){
+  if ( url_before == url_now) {
+    window.history.back();    
+  }else{
+    window.location = home_url;
+  };
+}
+</script>
 
 
       <footer class="site-footer">

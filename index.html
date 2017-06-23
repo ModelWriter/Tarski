@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="/Tarski/css/bootstrap.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -17,14 +17,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="/Tarski/assets/css/style.css">
+    <link rel="stylesheet" href="/Tarski/css/custom.css">
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/Tarski/js/bootstrap.min.js"></script>
   </head>
   <body>
     <section class="page-header">
       <h1 class="project-name">Tarski: A Platform for Automated Analysis of Traceability</h1>
       <h2 class="project-tagline">Automated Reasoning about Traces based on Configurable Formal Semantics</h2>
-      <a href="index.html" class="btn">Home</a>
+      <a href="/Tarski/" class="btn">Home</a>
       <a href="https://github.com/ModelWriter/Tarski" class="btn">View on GitHub</a>
       <a href="https://itea3.org/project/modelwriter.html" class="btn">ITEA-ModelWriter Project</a>
       <a href="https://itea3.org/project/assume.html" class="btn">ITEA-ASSUME Project</a>
@@ -42,37 +47,48 @@
 
 <hr>
 
-<div class="row">
+<div class="row" id="demonstrations">
+  
+  
   <div class="col-sm-6 col-md-4 col-lg-4">
     <div class="thumbnail">
       <img src="Figures/plane.jpg" alt="...">
       <div class="caption">
         <h3>Aviation Industry</h3>
         <p>Synchronization of regulation documentation with the design rule repository, building links between regulation documents in natural language rules to reduce time and design errors.</p>
-        <p><a href="ecas-axioms.html" class="btn_b btn-primary" role="button">Demonstrator</a> <a href="http://www.airbus.com/" class="btn_b btn-success" role="button">Airbus</a></p>
+        <p><a href="ecas-axioms.html" class="btn_b btn-primary" role="button">Demonstrator</a> 
+           <a href="http://www.airbus.com/" class="btn_b btn-success" role="button">Airbus</a>
+        </p>
       </div>
     </div>
   </div>
+  
   <div class="col-sm-6 col-md-4 col-lg-4">
     <div class="thumbnail">
       <img src="Figures/engine.png" alt="...">
       <div class="caption">
         <h3>Automative Industry</h3>
         <p>Synchronization of design specifications with computer aided design data to increase the productivity of cross functional engineering teams by analysing the impact of design changes.</p>
-        <p><a href="ecas-axioms.html" class="btn_b btn-primary" role="button">Demonstrator</a> <a href="https://www.fordotosan.com.tr/en" class="btn_b btn-success" role="button">FordOtosan</a></p>
+        <p><a href="ecas-axioms.html" class="btn_b btn-primary" role="button">Demonstrator</a> 
+           <a href="https://www.fordotosan.com.tr/en" class="btn_b btn-success" role="button">FordOtosan</a>
+        </p>
       </div>
     </div>
   </div>
+  
   <div class="col-sm-6 col-md-4 col-lg-4">
     <div class="thumbnail">
       <img src="Figures/plane2.jpg" alt="...">
       <div class="caption">
         <h3>Software Industry</h3>
         <p>Traceability among artifacts produced in different stages of software development to prevent unsychronized and inconsistent trace-links increase the quality of the projects.</p>
-        <p><a href="ecas-axioms.html" class="btn_b btn-primary" role="button">Demonstrator</a> <a href="http://www.havelsan.com.tr/ENG/Main" class="btn_b btn-success" role="button">Havelsan</a></p>
+        <p><a href="ecas-axioms.html" class="btn_b btn-primary" role="button">Demonstrator</a> 
+           <a href="http://www.havelsan.com.tr/ENG/Main" class="btn_b btn-success" role="button">Havelsan</a>
+        </p>
       </div>
     </div>
   </div>
+  
 </div>
 
 <div class="row">
@@ -100,7 +116,7 @@
       <div class="caption">
        <h3>Specification of Trace Types</h3>
         <p>Project-based configuration of trace-location types. 
-        <a href="Figures/FormalSpecification.gif" class="btn_b btn-success btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+        <a href="/Tarski/feature/specification-of-trace-types/" class="btn_b btn-success btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
         </p>
       </div>
     
@@ -112,7 +128,7 @@
       <div class="caption">
        <h3>Specification of Trace Semantics</h3>
         <p>Project-based configuration of the trace semantics. 
-        <a href="Figures/FormalReasoning.gif" class="btn_b btn-success btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+        <a href="/Tarski/feature/specification-of-trace-semantics/" class="btn_b btn-success btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
         </p>
       </div>
     </div>
@@ -132,7 +148,7 @@
       <div class="caption">
         <h3>Text Locations</h3> 
         <p>Traced locations in a requirements document.
-        <a href="Figures/TextLocation.gif" class="btn_b btn-info btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+        <a href="/Tarski/feature/text-locations/" class="btn_b btn-info btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
         </p>
       </div>
     </div>
@@ -143,7 +159,7 @@
       <div class="caption">
         <h3>XMI Locations</h3>
         <p>Traced locations in an architecture document.
-        <a href="Figures/XMILocation.gif" class="btn_b btn-info btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+        <a href="/Tarski/feature/xmi-locations/" class="btn_b btn-info btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
         </p>
       </div>
     </div>
@@ -176,7 +192,7 @@
       <div class="caption">
        <h3>Traceability Management</h3>
         <p>Functions such as create, delete, update and change type of the traces with respect to type hierarchy. 
-        <a href="Figures/TraceabilityManagement.gif" class="btn_b btn-warning btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+        <a href="/Tarski/feature/traceability-management/" class="btn_b btn-warning btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
         </p>
       </div>
     </div>
@@ -191,7 +207,7 @@
       <div class="caption">
        <h3>Automated Reasoning</h3>
         <p>Functions such as inferring new traces, consistency checking, type approximation for trace-Locations. 
-        <a href="Figures/ReasoningResult.gif" class="btn_b btn-danger btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+        <a href="/Tarski/feature/automated-reasoning/" class="btn_b btn-danger btn-xs" role="button"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
         </p>
       </div>
     </div>
@@ -248,7 +264,7 @@ We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)<
     </div>
 </div>
 
-<div class="bs-callout bs-callout-default" id="acknowledgements">
+<div class="bs-callout bs-callout-success" id="acknowledgements">
   <h4>Acknowledgements</h4>
   <div class="row">
 	  <div class="col-xs-6 col-md-4">
@@ -267,7 +283,51 @@ We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)<
 		</a>
 	  </div>
   </div>
+  <!--  <div class="panel-body">
+This work is conducted within ModelWriter and ASSUME projects, both labeled by the European Union's EUREKA Cluster programme Information Technology for European Advancement (ITEA) and partially supported by the Scientific and Technological Research Council of Turkey (TUBITAK), Technology and Innovation Funding Programs Directorate (TEYDEB) under project # 9140014, 9150181 and Minister for the Economy, Industry and Digital Affairs of France, Directorate-General for Enterprise (DGE) under contract # 142930204. The authors would like to acknowledge networking support by European Cooperation in Science and Technology Action IC1404 "Multi-Paradigm Modelling for Cyber-Physical Systems".</div>
+-->
 </div>
+
+<!--
+<div class="row" id="configuration">
+  <div class="col-sm-12 col-md-6">
+    <h1>Contributors</h1>
+    <div class="list-group">
+    
+      <a href="people/ferhat-erata/index.html" class="list-group-item">Ferhat Erata</a>
+    
+      <a href="people/emil-khamitov/index.html" class="list-group-item">Emil Khamitov</a>
+    
+      <a href="people/hasan-emre-kirmizi/index.html" class="list-group-item">Hasan Emre Kırmızı</a>
+    
+      <a href="people/yunus-emre-seker/index.html" class="list-group-item">Yunus Emre Seker</a>
+    
+      <a href="people/harun-uyar/index.html" class="list-group-item">Harun Uyar</a>
+    
+      <a href="people/irem-fidandan/index.html" class="list-group-item">Irem Fidandan</a>
+    
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6">
+    <h1>Features</h1>
+    <div class="list-group">
+    
+      <a href="feature/specification-of-trace-types/index.html" class="list-group-item">Specification of Trace Types</a>
+    
+      <a href="feature/specification-of-trace-semantics/index.html" class="list-group-item">Specification of Trace Semantics</a>
+    
+      <a href="feature/text-locations/index.html" class="list-group-item">Text Locations</a>
+    
+      <a href="feature/xmi-locations/index.html" class="list-group-item">XMI Locations</a>
+    
+      <a href="feature/traceability-management/index.html" class="list-group-item">Traceability Management</a>
+    
+      <a href="feature/automated-reasoning/index.html" class="list-group-item">Automated Reasoning</a>
+    
+    </div>
+  </div>
+</div>
+-->
 
 <!--
 <div class="bs-callout bs-callout-default">
@@ -367,7 +427,7 @@ We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)<
 
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/ModelWriter/Tarski">Tarski</a> is maintained by <a href="https://itea3.org/project/modelwriter.html">ModelWriter Project. <a class="navbar-brand" href="https://itea3.org/project/modelwriter.html"><img alt="Brand" src="Figures/mw.png">
+        <span class="site-footer-owner"><a href="https://github.com/ModelWriter/Tarski">Tarski</a> is maintained by <a href="https://itea3.org/project/modelwriter.html">ModelWriter Project. <a class="navbar-brand" href="https://itea3.org/project/modelwriter.html"><img alt="Brand" src="/Tarski/Figures/mw.png">
 		  </a></a></span>
         <!--<span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>-->
       </footer>
@@ -384,10 +444,6 @@ We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)<
         ga('send', 'pageview');
       </script>
     
-    
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+   
   </body>
 </html>
