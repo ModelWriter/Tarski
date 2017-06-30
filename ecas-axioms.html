@@ -19,6 +19,11 @@
     <link rel="stylesheet" href="/Tarski/assets/css/style.css">
     <link rel="stylesheet" href="/Tarski/css/custom.css">
     
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/Tarski/js/bootstrap.min.js"></script>
+    
 	<script type="text/x-mathjax-config">
 	//
 	//  The document is hidden until MathJax is finished, then
@@ -42,11 +47,11 @@
 	<!--      displayAlign: ["left"], -->
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
-		  jax: ["input/TeX","output/CommonHTML"],
+		  jax: ["input/TeX","output/SVG", "output/PreviewHTML"],
  		  displayAlign: ["center"],
  		  showMathMenu: false,
  		  showMathMenuMSIE: false,
-		  extensions: ["tex2jax.js"],
+		  extensions: ["tex2jax.js", "fast-preview.js"],
 		  TeX: {
 			extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js", "noUndefined.js"]
 		  }
@@ -63,7 +68,7 @@
 		  }
 		});
 	</script>
-	<script type="text/javascript" src="/Tarski/MathJax/MathJax.js?config=TeX-AMS_CHTML"></script>
+	<script type="text/javascript" src="/Tarski/MathJax/MathJax.js"></script>
   </head>
   <body>
     <section class="page-header">
@@ -207,13 +212,14 @@
 	</div>
 </div>
 
-<a id="back" href="/Tarski/" class="btn_b btn-primary" role="button"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>Back</a>
+<div> <a id="back" href="/Tarski/" data-original-title="Back to the previous page" data-toggle="tooltip" role="button" class="btn_b btn-sm btn-success"><i class="glyphicon glyphicon-remove"></i></a> </div>
+                
 <script type="text/javascript">
     $('a#back').click(function(){goBackOrGoHome();})
 </script>
 
 <script type="text/javascript">
-home_url = "/Tarski/";
+home_url = "/Tarski/"; 
 
 pathArray = document.referrer.split( '/' );
 protocol = pathArray[0];
@@ -233,34 +239,11 @@ function goBackOrGoHome(){
 }
 </script>
 
-<!--
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">In-line Mathematics</div>
-        <div class="panel-body">
-         	Finally, while display equations look good for a page of samples, the
-			ability to mix math and text in a paragraph is also important.  This
-			expression \(\sqrt{3x-1}+(1+x)^2\) is an example of an inline equation.  As
-			you see, MathJax equations can be used this way as well, without unduly
-			disturbing the spacing between lines. In equation \eqref{syn:product}, we find the value of an 
-			interesting integral: ... In equation \eqref{eq:subset}, we find the value of an 
-			interesting integral: ...
-        </div>
-      </div>
-    </div>
-</div>
--->
 
 
       
       </div>
       
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/Tarski/js/bootstrap.min.js"></script>
-
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/ModelWriter/Tarski">Tarski</a> is maintained by <a href="https://github.com/ModelWriter">ModelWriter Project. <a class="navbar-brand" href="#"><img alt="Brand" src="/Tarski/Figures/mw.png">
 		  </a></a></span>
@@ -279,8 +262,6 @@ function goBackOrGoHome(){
         ga('send', 'pageview');
       </script>
     
-    
-
     
   </body>
 </html>

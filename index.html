@@ -223,7 +223,7 @@
       <div class="panel panel-success">
         <div class="panel-heading">Implementation</div>
         <div class="panel-body">
-We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)</a>, an efficient SAT-based finite model finder for relational logic, to perform automated trace reasoning using the user-defined semantics. Trace types and their semantics are specified in the restricted (cf. <a href="kodkod_grammar">grammar</a>) form of Alloy, while the artifacts containing manually assigned traces are automatically transformed into Alloy specifications. Using the trace semantics and the artifacts in Alloy <a href="#AlloyBook">(Jackson, 2012)</a>, we directly call KodKod API (missing reference) to reason about traces.
+We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)</a>, an efficient SAT-based finite model finder for relational logic, to perform automated trace reasoning using the user-defined semantics. Trace types and their semantics are specified in the restricted (cf. <a href="kodkod_grammar">grammar</a>) form of Alloy, while the artifacts containing manually assigned traces are automatically transformed into Alloy specifications. Using the trace semantics and the artifacts in Alloy <a href="#AlloyBook">(Jackson, 2012)</a>, we directly call KodKod API (missing reference) to reason about traces. The decision procedure of KodKod model finder is integrated instead of using Alloy Analyzer since Alloy has no notion of partial models. If a partial traceability instance is available for a set of Alloy constraints which is usually the case, it can only be provided to the analyzer in the form of additional constraints. Since KodKod, that is the back-end reasoner of Alloy Analyzer, is essentially forced to rediscover the partial model from the constraints, the approach is limited in scale <a href="#KodKodPhdThesis">(Torlak, 2008)</a>.
         </div>
       </div>
     </div>
@@ -231,7 +231,7 @@ We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)<
 
 <div class="panel panel-info"> 
 	<div class="panel-heading">Evaluation Results </div> 
-	<div class="panel-body">Details about evaluation result of the system for three different instances given the above specification. Minisat <a href="#Minisat">(Eén &amp; Sörensson, 2003)</a> Sat Solver is chosen for both Alloy (alloy4.2-2015-02-22.jar) and KodKod (Kodkod 2.1) solvers. From Alloy to SMT solver translation for these cases, we employ the translation method proposed by El Ghazi et.al. <a href="#ElGhazi2011">(2011)</a> and the problems are encoded in SMT-LIB <a href="#smtlib">(Barrett, Stump, Tinelli, &amp; others, 2010)</a> syntax which is fed into Z3 solver <a href="#z3">(Moura &amp; Bjørner, 2008)</a>. Solving times are indicated in milliseconds. Transitive closure and integer arithmetic aren't used in these use cases to fairly benchmark the results with the SMT solvers. In SMT-LIB, the logic is set for Equality Logic with Uninterpreted Functions (UF).</div> 
+	<div class="panel-body">Details about evaluation result of the system for three different instances given the above specification. Minisat <a href="#Minisat">(Eén &amp; Sörensson, 2003)</a> Sat Solver is chosen for both Alloy (alloy4.2-2015-02-22.jar) and KodKod (Kodkod 2.1) solvers. From Alloy to SMT solver translation for these cases, we employ the translation method proposed by El Ghazi et.al. <a href="#ElGhazi2011">(2011)</a> and the problems are encoded in SMT-LIB <a href="#smtlib">(Barrett, Stump, Tinelli, &amp; others, 2010)</a> syntax which is fed into Z3 solver <a href="#z3">(Moura &amp; Bjørner, 2008)</a>. Solving times are indicated in milliseconds. Transitive closure and integer arithmetic aren't used in these use cases to fairly benchmark the results with the SMT solver. In SMT-LIB, the logic is set for Equality Logic with Uninterpreted Functions (UF). Evaluation results are obtained on a machine, that runs 64 bit debian linux operating system with 8 GB of memory and 2.90GHz Intel i7-3520M CPU.</div> 
 	<div style="overflow-y: hidden">
 		<table class="table table-striped table-hover table-responsive"> 
 			<thead>
@@ -264,28 +264,19 @@ We use Kodkod <a href="#Torlak:2007">(Torlak &amp; Jackson, 2007; Torlak, 2008)<
     </div>
 </div>
 
-<div class="bs-callout bs-callout-success" id="acknowledgements">
-  <h4>Acknowledgements</h4>
+<div class="bs-callout bs-callout-success" id="thanks">
+  <a href="acknowledgements/#main"><h4>Acknowledgements</h4></a>
   <div class="row">
 	  <div class="col-xs-6 col-md-4">
-		<a href="https://itea3.org/project/modelwriter.html" class="thumbnail">
-		  <img src="Logo/ITEA3.jpg" alt="...">
-		</a>
+		<a href="https://itea3.org/project/modelwriter.html" class="thumbnail"> <img src="Figures/ITEA3.jpg" alt="..."> </a>
 	  </div>
 	  <div class="col-xs-6 col-md-4">
-		<a href="http://www.eurekanetwork.org/" class="thumbnail">
-		  <img src="Logo/EUREKA.png" alt="...">
-		</a>
+		<a href="http://www.eurekanetwork.org/" class="thumbnail"> <img src="Figures/EUREKA.png" alt="..."> </a>
 	  </div>
 	  <div class="col-xs-6 col-md-4">
-		<a href="http://www.cost.eu/COST_Actions/ict/IC1404" class="thumbnail">
-		  <img src="Logo/COST.jpg" alt="...">
-		</a>
+		<a href="http://www.cost.eu/COST_Actions/ict/IC1404" class="thumbnail"> <img src="Figures/COST.jpg" alt="..."> </a>
 	  </div>
   </div>
-  <!--  <div class="panel-body">
-This work is conducted within ModelWriter and ASSUME projects, both labeled by the European Union's EUREKA Cluster programme Information Technology for European Advancement (ITEA) and partially supported by the Scientific and Technological Research Council of Turkey (TUBITAK), Technology and Innovation Funding Programs Directorate (TEYDEB) under project # 9140014, 9150181 and Minister for the Economy, Industry and Digital Affairs of France, Directorate-General for Enterprise (DGE) under contract # 142930204. The authors would like to acknowledge networking support by European Cooperation in Science and Technology Action IC1404 "Multi-Paradigm Modelling for Cyber-Physical Systems".</div>
--->
 </div>
 
 <!--
